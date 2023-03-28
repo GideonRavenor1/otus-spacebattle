@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "otus-spacebattle"
 version = "0.1.0"
-description = ""
+description = "Выработка навыка применения SOLID принципов на примере игры 'Космическая битва'"
 authors = ["Fedor Obolikhin <fedor.obolikhin@amonitoring.ru>"]
 readme = "README.md"
 packages = [{include = "otus_spacebattle"}]
