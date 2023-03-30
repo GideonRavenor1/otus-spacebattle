@@ -8,3 +8,7 @@ class ReadVelocityError(Exception):
 
 class SetPositionError(Exception):
 	"""Ошибка при попытке установить позицию объекта"""
+
+
+class SetVelocityError(Exception):
+	"""Ошибка при попытке установить скорость объекта"""
