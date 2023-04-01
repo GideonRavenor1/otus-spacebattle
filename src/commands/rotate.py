@@ -2,7 +2,7 @@ from src.commands.base import BaseCommand
 from src.interfaces.movements import Rotatable
 
 
-class Rotate(BaseCommand):
+class RotateCommand(BaseCommand):
 	def __init__(self, obj: Rotatable) -> None:
 		self._obj = obj
 		

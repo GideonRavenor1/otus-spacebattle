@@ -1,8 +1,9 @@
 import pytest
 
-from src.commands import Move
+from src.commands import MoveCommand
 from src.exceptions import ReadPositionError, ReadVelocityError, SetPositionError
 from src.vectors import Vector
+from tests.utils import get_spaceship
 
 
 def test_move_valid_params() -> None:
@@ -16,19 +17,8 @@ def test_move_valid_params() -> None:
 		"velocity": Vector(-7, 3)
 	}
 	
-	class MovableImplementation:
-
-		def get_position(self) -> Vector:
-			return mock_obj["position"]
-		
-		def set_position(self, vector: Vector) -> None:
-			mock_obj["position"] = vector
-		
-		def get_velocity(self) -> Vector:
-			return mock_obj["velocity"]
-		
-	mock_movable_obj = MovableImplementation()
-	Move(obj=mock_movable_obj).execute()
+	mock_movable_obj = get_spaceship(data=mock_obj)
+	MoveCommand(obj=mock_movable_obj).execute()
 	
 	assert mock_movable_obj.get_position() == Vector(5, 8)
 
@@ -58,7 +48,22 @@ def test_move_impossible_read_position() -> None:
 	
 	mock_movable_obj = MovableImplementation()
 	with pytest.raises(ReadPositionError):
-		Move(obj=mock_movable_obj).execute()
+		MoveCommand(obj=mock_movable_obj).execute()
+
+
+def test_move_if_object_remains_in_place() -> None:
+	"""
+	После сдвига объекта он остаелся на месте.
+	"""
+	
+	mock_obj = {
+		"position": Vector(12, 5),
+		"velocity": Vector(0, 0)
+	}
+	
+	mock_movable_obj = get_spaceship(data=mock_obj)
+	with pytest.raises(SetPositionError):
+		MoveCommand(obj=mock_movable_obj).execute()
 
 
 def test_move_impossible_read_velocity() -> None:
@@ -86,7 +91,7 @@ def test_move_impossible_read_velocity() -> None:
 	
 	mock_movable_obj = MovableImplementation()
 	with pytest.raises(ReadVelocityError):
-		Move(obj=mock_movable_obj).execute()
+		MoveCommand(obj=mock_movable_obj).execute()
 
 
 def test_move_impossible_set_position() -> None:
@@ -114,4 +119,4 @@ def test_move_impossible_set_position() -> None:
 	
 	mock_movable_obj = MovableImplementation()
 	with pytest.raises(SetPositionError):
-		Move(obj=mock_movable_obj).execute()
+		MoveCommand(obj=mock_movable_obj).execute()
