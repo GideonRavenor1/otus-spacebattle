@@ -6,7 +6,7 @@ current_dir = Path(__file__).parent.resolve()
 logger = logging.getLogger("exception_logger")
 
 logFileFormatter = logging.Formatter(
-    fmt=f"%(levelname)s %(asctime)s - %(message)s",
+    fmt="%(levelname)s %(asctime)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 fileHandler = logging.FileHandler(
