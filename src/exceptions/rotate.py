@@ -1,14 +1,14 @@
-class ReadDirectionError(Exception):
-	"""Ошибка при попытке получить текущее направление объекта"""
-	
-	
-class ReadAngularVelocityError(Exception):
-	"""Ошибка при попытке получить угловую скорость объекта"""
-	
+class ReadDirectionException(Exception):
+    """Ошибка при попытке получить текущее направление объекта"""
 
-class SetDirectionError(Exception):
-	"""Ошибка при попытке установить направление объекта"""
-	
 
-class RaedDirectionNumberError(Exception):
-	"""Ошибка при попытке получить номер направления объекта"""
+class ReadAngularVelocityException(Exception):
+    """Ошибка при попытке получить угловую скорость объекта"""
+
+
+class SetDirectionException(Exception):
+    """Ошибка при попытке установить направление объекта"""
+
+
+class RaedDirectionNumberException(Exception):
+    """Ошибка при попытке получить номер направления объекта"""
