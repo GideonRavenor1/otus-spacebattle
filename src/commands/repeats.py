@@ -2,8 +2,8 @@ from src.commands.base import BaseCommand
 from src.exceptions import RepeatException
 
 
-class RepeatCommand(BaseCommand):
-    def __init__(self, command: BaseCommand) -> None:
+class FirstRepeatCommand(BaseCommand):
+    def __init__(self, command: BaseCommand, *args, **kwargs) -> None:
         self._command = command
 
     def execute(self) -> None:
@@ -13,20 +13,5 @@ class RepeatCommand(BaseCommand):
             raise RepeatException(str(ex))
 
 
-class DoubleRepeatCommand(BaseCommand):
-    MAX_RETRY = 2
-
-    def __init__(self, command: BaseCommand) -> None:
-        self._command = command
-
-    def execute(self) -> None:
-        exception = None
-        for _ in range(self.MAX_RETRY):
-            try:
-                self._command.execute()
-            except Exception as ex:
-                exception = ex
-                continue
-            else:
-                return
-        raise RepeatException(str(exception))
+class SecondRepeatCommand(FirstRepeatCommand):
+    ...

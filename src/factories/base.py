@@ -5,8 +5,8 @@ from src.commands import BaseMacroCommand
 
 
 class BaseMacroCommandFactory(ABC):
-    def __init__(self, macro_command: Optional[BaseMacroCommand] = None) -> None:
-        self._macro_command = BaseMacroCommand() if macro_command is None else macro_command
+    def __init__(self, macro_command: Optional[type[BaseMacroCommand]] = BaseMacroCommand) -> None:
+        self._macro_command = macro_command()
 
     @abstractmethod
     def create(self) -> BaseMacroCommand:
