@@ -3,7 +3,7 @@ from src.exceptions import RepeatException
 
 
 class FirstRepeatCommand(BaseCommand):
-    def __init__(self, command: BaseCommand, *args, **kwargs) -> None:
+    def __init__(self, *, command: BaseCommand, **kwargs) -> None:
         self._command = command
 
     def execute(self) -> None:

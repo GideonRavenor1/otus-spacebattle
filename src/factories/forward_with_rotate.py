@@ -18,10 +18,12 @@ T_MNR = TypeVar("T_MNR", bound=Union[Movable, NeedsFuel, Rotatable])
 class ForwardWithRotateCommandFactory(BaseMacroCommandFactory):
     def __init__(
         self,
+        *,
         obj: T_MNR,
         macro_command: Optional[type[BaseMacroCommand]] = ForwardWithRotateMacroCommand,
+        **kwargs,
     ) -> None:
-        super().__init__(macro_command)
+        super().__init__(macro_command=macro_command, **kwargs)
         self._obj = obj
 
     def create(self) -> BaseMacroCommand:

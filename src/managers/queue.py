@@ -6,7 +6,7 @@ from src.managers.base import BaseManager
 
 
 class QueueManager(BaseManager):
-    def __init__(self, commands: list[BaseCommand]) -> None:
+    def __init__(self, *, commands: list[BaseCommand], **kwargs) -> None:
         self._queue = Queue()
         self._exception_handler = ExceptionHandler()
 

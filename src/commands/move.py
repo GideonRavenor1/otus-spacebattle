@@ -5,7 +5,7 @@ from src.vectors import Vector
 
 
 class MoveCommand(BaseCommand):
-    def __init__(self, obj: Movable) -> None:
+    def __init__(self, *, obj: Movable, **kwargs) -> None:
         self._obj = obj
 
     def execute(self) -> None:

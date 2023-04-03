@@ -11,7 +11,7 @@ class BaseCommand(ABC):
 
 
 class BaseMacroCommand(BaseCommand):
-    def __init__(self, commands: Optional[list[BaseCommand]] = None) -> None:
+    def __init__(self, *, commands: Optional[list[BaseCommand]] = None, **kwargs) -> None:
         self._commands = [] if commands is None else commands
 
     def add(self, command: BaseCommand) -> None:

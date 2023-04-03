@@ -4,7 +4,7 @@ from src.interfaces import NeedsFuel
 
 
 class CheckFuelCommand(BaseCommand):
-    def __init__(self, obj: NeedsFuel) -> None:
+    def __init__(self, *, obj: NeedsFuel, **kwargs) -> None:
         self._obj = obj
 
     def execute(self) -> None:

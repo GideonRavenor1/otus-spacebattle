@@ -14,8 +14,14 @@ T_MN = TypeVar("T_MN", bound=Union[Movable, NeedsFuel])
 
 
 class ForwardMacroCommandFactory(BaseMacroCommandFactory):
-    def __init__(self, obj: T_MN, macro_command: Optional[type[BaseMacroCommand]] = ForwardMacroCommand) -> None:
-        super().__init__(macro_command)
+    def __init__(
+        self,
+        *,
+        obj: T_MN,
+        macro_command: Optional[type[BaseMacroCommand]] = ForwardMacroCommand,
+        **kwargs,
+    ) -> None:
+        super().__init__(macro_command=macro_command, **kwargs)
         self._obj = obj
 
     def create(self) -> BaseMacroCommand:

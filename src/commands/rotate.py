@@ -3,7 +3,7 @@ from src.interfaces.movements import Rotatable
 
 
 class RotateCommand(BaseCommand):
-    def __init__(self, obj: Rotatable) -> None:
+    def __init__(self, *, obj: Rotatable, **kwargs) -> None:
         self._obj = obj
 
     def execute(self) -> None:

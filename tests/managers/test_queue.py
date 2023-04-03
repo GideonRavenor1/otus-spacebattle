@@ -22,7 +22,7 @@ def test_queue_manager_with_valid_params() -> None:
     forward_rotate_command = ForwardWithRotateCommandFactory(obj=mock_space_ship_obj).create()
 
     commands = [forward_command, forward_rotate_command]
-    manager = QueueManager(commands)
+    manager = QueueManager(commands=commands)
     manager.run()
 
     assert mock_space_ship_obj.get_position() == Vector(-2, 11)
@@ -51,7 +51,7 @@ def test_manager_with_not_enough_fuel(caplog: LogCaptureFixture) -> None:
     forward_rotate_command = ForwardWithRotateCommandFactory(obj=mock_space_ship_obj).create()
 
     commands = [forward_command, forward_rotate_command]
-    manager = QueueManager(commands)
+    manager = QueueManager(commands=commands)
     manager.run()
 
     assert mock_space_ship_obj.get_position() == Vector(-2, 11)

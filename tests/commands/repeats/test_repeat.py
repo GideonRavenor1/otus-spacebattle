@@ -14,7 +14,7 @@ def test_repeat_valid_params() -> None:
     mock_obj = {"direction": 250, "angular_velocity": 30, "direction_number": 360}
     mock_rotate_obj = get_game_object(data=mock_obj)
     command = RotateCommand(obj=mock_rotate_obj)
-    repeat_command = FirstRepeatCommand(command)
+    repeat_command = FirstRepeatCommand(command=command)
     repeat_command.execute()
 
     assert mock_rotate_obj.get_direction() == 280
@@ -42,6 +42,6 @@ def test_repeat_raise_exception() -> None:
 
     mock_rotate_obj = RotatableImplementation()
     command = RotateCommand(obj=mock_rotate_obj)
-    repeat_command = FirstRepeatCommand(command)
+    repeat_command = FirstRepeatCommand(command=command)
     with pytest.raises(RepeatException):
         repeat_command.execute()
