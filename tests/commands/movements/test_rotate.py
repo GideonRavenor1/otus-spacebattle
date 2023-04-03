@@ -2,16 +2,17 @@ import pytest
 
 from src.commands import RotateCommand
 from src.exceptions import (
-	RaedDirectionNumberException,
-	ReadAngularVelocityException,
-	ReadDirectionException,
-	SetDirectionException,
+    RaedDirectionNumberException,
+    ReadAngularVelocityException,
+    ReadDirectionException,
+    SetDirectionException,
 )
 from tests.utils import get_game_object
 
 
 @pytest.mark.parametrize(
-    "direction, angular_velocity, direction_number, expected", [(270, 30, 360, 300), (200, 0, 360, 200)]
+    ("direction", "angular_velocity", "direction_number", "expected"),
+    [(270, 30, 360, 300), (200, 0, 360, 200)],
 )
 def test_rotate_valid_param(direction: int, angular_velocity: int, direction_number: int, expected: int) -> None:
     """

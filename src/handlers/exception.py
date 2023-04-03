@@ -1,11 +1,28 @@
 from src.commands import (
-	BaseCommand, BaseMacroCommand, BurnFuelCommand, ChangeVelocityCommand, CheckFuelCommand, ExceptionLoggingCommand,
-	MoveCommand, RepeatCommand, RotateCommand,
+    BaseCommand,
+    BaseMacroCommand,
+    BurnFuelCommand,
+    ChangeVelocityCommand,
+    CheckFuelCommand,
+    ExceptionLoggingCommand,
+    MoveCommand,
+    RepeatCommand,
+    RotateCommand,
 )
 from src.exceptions import (
-	NoFuelException, RaedDirectionNumberException, ReadAngularVelocityException, ReadDirectionException,
-	ReadFuelLevelException, ReadPositionException, ReadRequiredFuelLevelException, ReadVelocityException,
-	RepeatException, SetDirectionException, SetFuelLevelException, SetPositionException, SetVelocityException,
+    NoFuelException,
+    RaedDirectionNumberException,
+    ReadAngularVelocityException,
+    ReadDirectionException,
+    ReadFuelLevelException,
+    ReadPositionException,
+    ReadRequiredFuelLevelException,
+    ReadVelocityException,
+    RepeatException,
+    SetDirectionException,
+    SetFuelLevelException,
+    SetPositionException,
+    SetVelocityException,
 )
 from src.handlers.base import BaseHandler
 
@@ -60,17 +77,14 @@ COMMANDS = {
 
 class ExceptionHandler(BaseHandler):
     def handle(self, command: BaseCommand, exception: Exception) -> None:
-        if exception.__cause__ is not None:
-            exception_type = type(exception.__cause__)
-        else:
-            exception_type = type(exception)
+        exception_type = type(exception.__cause__) if exception.__cause__ is not None else type(exception)
 
         if exception_type is RepeatException:
             ExceptionLoggingCommand(exception).execute()
             return
 
         command_type = type(command)
-        handler_command = COMMANDS[command_type][exception_type](command)  # noqa
+        handler_command = COMMANDS[command_type][exception_type](command)
 
         try:
             handler_command.execute()

@@ -24,8 +24,9 @@ class DoubleRepeatCommand(BaseCommand):
         for _ in range(self.MAX_RETRY):
             try:
                 self._command.execute()
-                return
             except Exception as ex:
                 exception = ex
                 continue
+            else:
+                return
         raise RepeatException(str(exception))

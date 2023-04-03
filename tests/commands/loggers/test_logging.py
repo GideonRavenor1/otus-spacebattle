@@ -1,7 +1,9 @@
+from _pytest.logging import LogCaptureFixture
+
 from src.commands import ExceptionLoggingCommand
 
 
-def test_logging_command(caplog) -> None:
+def test_logging_command(caplog: LogCaptureFixture) -> None:
     """
     Проверяем, что в консоль выводится сообщение об ошибке
     """

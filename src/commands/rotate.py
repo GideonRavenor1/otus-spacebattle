@@ -8,5 +8,5 @@ class RotateCommand(BaseCommand):
 
     def execute(self) -> None:
         self._obj.set_direction(
-            self._obj.get_direction() + self._obj.get_angular_velocity() % self._obj.get_direction_number()
+            self._obj.get_direction() + self._obj.get_angular_velocity() % self._obj.get_direction_number(),
         )

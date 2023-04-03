@@ -1,3 +1,5 @@
+from _pytest.logging import LogCaptureFixture
+
 from src.commands import MoveCommand
 from src.exceptions import SetPositionException
 from src.handlers import ExceptionHandler
@@ -19,7 +21,7 @@ def test_exception_handler_with_positive_scenario() -> None:
     assert mock_movable_obj.get_position() == Vector(5, 8)
 
 
-def test_exception_handler_with_negative_scenario(caplog) -> None:
+def test_exception_handler_with_negative_scenario(caplog: LogCaptureFixture) -> None:
     """
     Проверяем, что в лог выводится сообщение об ошибке
     """

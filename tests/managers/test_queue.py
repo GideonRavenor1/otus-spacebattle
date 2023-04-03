@@ -1,5 +1,7 @@
+from _pytest.logging import LogCaptureFixture
+
 from src.factories import ForwardMacroCommandFactory, ForwardWithRotateCommandFactory
-from src.managers.queue import QueueManager
+from src.managers import QueueManager
 from src.vectors import Vector
 from tests.utils import get_game_object
 
@@ -28,7 +30,7 @@ def test_queue_manager_with_valid_params() -> None:
     assert mock_space_ship_obj.get_velocity() == Vector(90, 210)
 
 
-def test_manager_with_not_enough_fuel(caplog) -> None:
+def test_manager_with_not_enough_fuel(caplog: LogCaptureFixture) -> None:
     """
     Проверка на то, что топливо кончится после отработки первой макрокоманды, и вторая не выполнится.
     Так же проверяем, что ошибка записалось в лог.

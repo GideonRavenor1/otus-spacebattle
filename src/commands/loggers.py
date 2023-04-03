@@ -7,4 +7,5 @@ class ExceptionLoggingCommand(BaseCommand):
         self._exception = exception
 
     def execute(self) -> None:
-        logger.exception(f"{type(self._exception).__name__}: {self._exception}", exc_info=False)
+        msg = f"{type(self._exception).__name__}: {self._exception}"
+        logger.exception(msg, exc_info=False)
