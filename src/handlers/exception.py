@@ -70,7 +70,6 @@ class ExceptionHandler(BaseHandler):
             return
 
         command_type = type(command)
-        print(command_type)
         handler_command = COMMANDS[command_type][exception_type](command)  # noqa
 
         try:
