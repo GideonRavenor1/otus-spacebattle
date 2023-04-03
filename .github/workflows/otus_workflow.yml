@@ -28,11 +28,3 @@ jobs:
     - name: Run linter ruff
       run: |
         poetry run ruff .
-
-    - name: Codeball
-      uses: sturdy-dev/codeball-action@v2
-      with:
-        approvePullRequests: "false"
-        labelPullRequestsWhenApproved: "true"
-        labelPullRequestsWhenReviewNeeded: "true"
-        failJobsWhenReviewNeeded: "false"
