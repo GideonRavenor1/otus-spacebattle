@@ -1,18 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import Optional
 
-from src.commands import BaseMacroCommand
+from src.commands import BaseCommand
 
 
-class BaseMacroCommandFactory(ABC):
-    def __init__(
-        self,
-        *,
-        macro_command: Optional[type[BaseMacroCommand]] = BaseMacroCommand,
-        **kwargs,
-    ) -> None:
-        self._macro_command = macro_command()
+class BaseCommandFactory(ABC):
+    def __init__(self, *, params: dict) -> None:
+        self._params = params
 
     @abstractmethod
-    def create(self) -> BaseMacroCommand:
+    def create(self) -> BaseCommand:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def command(self) -> BaseCommand:
         raise NotImplementedError

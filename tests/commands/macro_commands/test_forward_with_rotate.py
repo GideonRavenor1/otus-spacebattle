@@ -1,7 +1,7 @@
 import pytest
 
 from src.exceptions import CommandException
-from src.factories import ForwardWithRotateCommandFactory
+from src.factories import COMMAND_FACTORIES
 from src.vectors import Vector
 from tests.utils import get_game_object
 
@@ -22,7 +22,8 @@ def test_moving_forward_with_rotate_valid_params() -> None:
     }
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
-    macro_command = ForwardWithRotateCommandFactory(obj=mock_space_ship_obj).create()
+    params = {"obj": mock_space_ship_obj}
+    macro_command = COMMAND_FACTORIES["forward_with_rotate"](params=params).create()
     macro_command.execute()
 
     assert mock_space_ship_obj.get_position() == Vector(5, 8)
@@ -43,7 +44,8 @@ def test_forward_movement_if_not_enough_fuel() -> None:
     }
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
-    macro_command = ForwardWithRotateCommandFactory(obj=mock_space_ship_obj).create()
+    params = {"obj": mock_space_ship_obj}
+    macro_command = COMMAND_FACTORIES["forward_with_rotate"](params=params).create()
     with pytest.raises(CommandException):
         macro_command.execute()
 
@@ -61,6 +63,7 @@ def test_forward_movement_if_object_remains_in_place() -> None:
     }
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
-    macro_command = ForwardWithRotateCommandFactory(obj=mock_space_ship_obj).create()
+    params = {"obj": mock_space_ship_obj}
+    macro_command = COMMAND_FACTORIES["forward_with_rotate"](params=params).create()
     with pytest.raises(CommandException):
         macro_command.execute()

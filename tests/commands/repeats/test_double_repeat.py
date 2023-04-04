@@ -1,6 +1,6 @@
 import pytest
 
-from src.commands import SecondRepeatCommand, MoveCommand
+from src.factories import COMMAND_FACTORIES
 from src.exceptions import ReadPositionException, RepeatException
 from src.vectors import Vector
 from tests.utils import get_game_object
@@ -13,8 +13,12 @@ def test_double_repeat_valid_params() -> None:
 
     mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
     mock_movable_obj = get_game_object(data=mock_obj)
-    command = MoveCommand(obj=mock_movable_obj)
-    repeat_command = SecondRepeatCommand(command=command)
+    move_params = {"obj": mock_movable_obj}
+    command = COMMAND_FACTORIES["move"](params=move_params).create()
+
+    repeat_params = {"command": command}
+    repeat_command = COMMAND_FACTORIES["second_repeat"](params=repeat_params).create()
+
     repeat_command.execute()
 
     assert mock_movable_obj.get_position() == Vector(5, 8)
@@ -37,8 +41,10 @@ def test_double_repeat_raise_exception() -> None:
         def get_velocity(self) -> Vector:
             return mock_obj["velocity"]
 
-    mock_movable_obj = MovableImplementation()
-    command = MoveCommand(obj=mock_movable_obj)
-    repeat_command = SecondRepeatCommand(command=command)
+    move_params = {"obj": MovableImplementation()}
+    command = COMMAND_FACTORIES["move"](params=move_params).create()
+
+    repeat_params = {"command": command}
+    repeat_command = COMMAND_FACTORIES["second_repeat"](params=repeat_params).create()
     with pytest.raises(RepeatException):
         repeat_command.execute()

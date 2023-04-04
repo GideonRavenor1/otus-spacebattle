@@ -1,6 +1,6 @@
 import pytest
 
-from src.commands import MoveCommand
+from src.factories import COMMAND_FACTORIES
 from src.exceptions import ReadPositionException, ReadVelocityException, SetPositionException
 from src.vectors import Vector
 from tests.utils import get_game_object
@@ -15,7 +15,8 @@ def test_move_valid_params() -> None:
     mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
 
     mock_movable_obj = get_game_object(data=mock_obj)
-    MoveCommand(obj=mock_movable_obj).execute()
+    params = {"obj": mock_movable_obj}
+    COMMAND_FACTORIES["move"](params=params).create().execute()
 
     assert mock_movable_obj.get_position() == Vector(5, 8)
 
@@ -37,9 +38,9 @@ def test_move_impossible_read_position() -> None:
         def get_velocity(self) -> Vector:
             return mock_obj["velocity"]
 
-    mock_movable_obj = MovableImplementation()
+    params = {"obj": MovableImplementation()}
     with pytest.raises(ReadPositionException):
-        MoveCommand(obj=mock_movable_obj).execute()
+        COMMAND_FACTORIES["move"](params=params).create().execute()
 
 
 def test_move_if_object_remains_in_place() -> None:
@@ -50,8 +51,10 @@ def test_move_if_object_remains_in_place() -> None:
     mock_obj = {"position": Vector(12, 5), "velocity": Vector(0, 0)}
 
     mock_movable_obj = get_game_object(data=mock_obj)
+
+    params = {"obj": mock_movable_obj}
     with pytest.raises(SetPositionException):
-        MoveCommand(obj=mock_movable_obj).execute()
+        COMMAND_FACTORIES["move"](params=params).create().execute()
 
 
 def test_move_impossible_read_velocity() -> None:
@@ -71,9 +74,9 @@ def test_move_impossible_read_velocity() -> None:
         def get_velocity(self) -> Vector:
             raise ReadVelocityException
 
-    mock_movable_obj = MovableImplementation()
+    params = {"obj": MovableImplementation()}
     with pytest.raises(ReadVelocityException):
-        MoveCommand(obj=mock_movable_obj).execute()
+        COMMAND_FACTORIES["move"](params=params).create().execute()
 
 
 def test_move_impossible_set_position() -> None:
@@ -93,6 +96,6 @@ def test_move_impossible_set_position() -> None:
         def get_velocity(self) -> Vector:
             return mock_obj["velocity"]
 
-    mock_movable_obj = MovableImplementation()
+    params = {"obj": MovableImplementation()}
     with pytest.raises(SetPositionException):
-        MoveCommand(obj=mock_movable_obj).execute()
+        COMMAND_FACTORIES["move"](params=params).create().execute()
