@@ -14,7 +14,7 @@ def test_check_fuel_valid_params() -> None:
     params = {"obj": get_game_object(data=mock_obj)}
 
     try:
-        COMMAND_FACTORIES["check_fuel"](params=params).create().execute()
+        COMMAND_FACTORIES["check_fuel"].create(params=params).execute()
     except NoFuelException:
         pytest.fail("Unexpected NoFuelError...")
 
@@ -28,4 +28,4 @@ def test_check_fuel_if_not_enough_fuel() -> None:
     params = {"obj": get_game_object(data=mock_obj)}
 
     with pytest.raises(NoFuelException):
-        COMMAND_FACTORIES["check_fuel"](params=params).create().execute()
+        COMMAND_FACTORIES["check_fuel"].create(params=params).execute()

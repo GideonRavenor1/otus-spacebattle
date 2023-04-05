@@ -4,14 +4,11 @@ from src.commands import BaseCommand
 
 
 class BaseCommandFactory(ABC):
-    def __init__(self, *, params: dict) -> None:
-        self._params = params
-
     @abstractmethod
-    def create(self) -> BaseCommand:
+    def create(self, *, params: dict) -> BaseCommand:
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def command(self) -> BaseCommand:
+    def command(self) -> type[BaseCommand]:
         raise NotImplementedError

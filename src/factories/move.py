@@ -6,10 +6,12 @@ from src.interfaces import Movable, VelocityChanger
 
 
 class MoveCommandFactory(BaseCommandFactory):
-    command = MoveCommand
+    @property
+    def command(self) -> type[MoveCommand]:
+        return MoveCommand
 
-    def create(self) -> MoveCommand:
-        obj: Optional[Movable] = self._params.get("obj")
+    def create(self, *, params: dict) -> MoveCommand:
+        obj: Optional[Movable] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
 
@@ -17,10 +19,12 @@ class MoveCommandFactory(BaseCommandFactory):
 
 
 class ChangeVelocityCommandFactory(BaseCommandFactory):
-    command = ChangeVelocityCommand
+    @property
+    def command(self) -> type[ChangeVelocityCommand]:
+        return ChangeVelocityCommand
 
-    def create(self) -> ChangeVelocityCommand:
-        obj: Optional[VelocityChanger] = self._params.get("obj")
+    def create(self, *, params: dict) -> ChangeVelocityCommand:
+        obj: Optional[VelocityChanger] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
 

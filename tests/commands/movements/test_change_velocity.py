@@ -15,7 +15,7 @@ def test_change_velocity_valid_params() -> None:
 
     obj = get_game_object(data=mock_obj)
     params = {"obj": obj}
-    COMMAND_FACTORIES["change_velocity"](params=params).create().execute()
+    COMMAND_FACTORIES["change_velocity"].create(params=params).execute()
 
     assert obj.get_velocity() == Vector(90, 210)
 
@@ -39,7 +39,7 @@ def test_change_velocity_impossible_set_velocity() -> None:
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(SetVelocityException):
-        COMMAND_FACTORIES["change_velocity"](params=params).create().execute()
+        COMMAND_FACTORIES["change_velocity"].create(params=params).execute()
 
 
 def test_change_velocity_impossible_read_velocity() -> None:
@@ -61,7 +61,7 @@ def test_change_velocity_impossible_read_velocity() -> None:
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
-        COMMAND_FACTORIES["change_velocity"](params=params).create().execute()
+        COMMAND_FACTORIES["change_velocity"].create(params=params).execute()
 
 
 def test_change_velocity_impossible_read_angular_velocity() -> None:
@@ -83,4 +83,4 @@ def test_change_velocity_impossible_read_angular_velocity() -> None:
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
-        COMMAND_FACTORIES["change_velocity"](params=params).create().execute()
+        COMMAND_FACTORIES["change_velocity"].create(params=params).execute()

@@ -7,15 +7,15 @@ from src.factories.move import MoveCommandFactory, ChangeVelocityCommandFactory
 from src.factories.loggers import ExceptionLoggingCommandFactory
 
 
-COMMAND_FACTORIES: dict[str, type[BaseCommandFactory]] = {
-    "forward": ForwardMacroCommandFactory,
-    "forward_with_rotate": ForwardWithRotateCommandFactory,
-    "check_fuel": CheckFuelCommandFactory,
-    "burn_fuel": BurnFuelCommandFactory,
-    "first_repeat": FirstRepeatCommandFactory,
-    "second_repeat": SecondRepeatCommandFactory,
-    "rotate": RotateCommandFactory,
-    "move": MoveCommandFactory,
-    "change_velocity": ChangeVelocityCommandFactory,
-    "log_exception": ExceptionLoggingCommandFactory,
+COMMAND_FACTORIES: dict[str, BaseCommandFactory] = {
+    "forward": ForwardMacroCommandFactory(),
+    "forward_with_rotate": ForwardWithRotateCommandFactory(),
+    "check_fuel": CheckFuelCommandFactory(),
+    "burn_fuel": BurnFuelCommandFactory(),
+    "first_repeat": FirstRepeatCommandFactory(),
+    "second_repeat": SecondRepeatCommandFactory(),
+    "rotate": RotateCommandFactory(),
+    "move": MoveCommandFactory(),
+    "change_velocity": ChangeVelocityCommandFactory(),
+    "log_exception": ExceptionLoggingCommandFactory(),
 }

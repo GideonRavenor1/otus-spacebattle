@@ -17,35 +17,39 @@ T_MN = TypeVar("T_MN", bound=Union[Movable, NeedsFuel])
 
 
 class ForwardMacroCommandFactory(BaseCommandFactory):
-    command = ForwardMacroCommand
+    @property
+    def command(self) -> type[ForwardMacroCommand]:
+        return ForwardMacroCommand
 
-    def create(self) -> ForwardMacroCommand:
-        obj: Optional[T_MN] = self._params.get("obj")
+    def create(self, *, params: dict) -> ForwardMacroCommand:
+        obj: Optional[T_MN] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
 
-        self.command = self.command()
-        self.command.add(command=CheckFuelCommand(obj=obj))
-        self.command.add(command=MoveCommand(obj=obj))
-        self.command.add(command=BurnFuelCommand(obj=obj))
-        return self.command
+        macro_command = self.command()
+        macro_command.add(command=CheckFuelCommand(obj=obj))
+        macro_command.add(command=MoveCommand(obj=obj))
+        macro_command.add(command=BurnFuelCommand(obj=obj))
+        return macro_command
 
 
 class ForwardWithRotateCommandFactory(BaseCommandFactory):
-    command = ForwardWithRotateMacroCommand
+    @property
+    def command(self) -> type[ForwardWithRotateMacroCommand]:
+        return ForwardWithRotateMacroCommand
 
-    def create(self) -> ForwardWithRotateMacroCommand:
-        obj: Optional[T_MNR] = self._params.get("obj")
+    def create(self, *, params: dict) -> ForwardWithRotateMacroCommand:
+        obj: Optional[T_MNR] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
 
-        self.command = self.command()
-        self.command.add(command=CheckFuelCommand(obj=obj))
-        self.command.add(command=MoveCommand(obj=obj))
-        self.command.add(command=BurnFuelCommand(obj=obj))
+        macro_command = self.command()
+        macro_command.add(command=CheckFuelCommand(obj=obj))
+        macro_command.add(command=MoveCommand(obj=obj))
+        macro_command.add(command=BurnFuelCommand(obj=obj))
 
-        self.command.add(command=CheckFuelCommand(obj=obj))
-        self.command.add(command=RotateCommand(obj=obj))
-        self.command.add(command=ChangeVelocityCommand(obj=obj))
-        self.command.add(command=BurnFuelCommand(obj=obj))
-        return self.command
+        macro_command.add(command=CheckFuelCommand(obj=obj))
+        macro_command.add(command=RotateCommand(obj=obj))
+        macro_command.add(command=ChangeVelocityCommand(obj=obj))
+        macro_command.add(command=BurnFuelCommand(obj=obj))
+        return macro_command

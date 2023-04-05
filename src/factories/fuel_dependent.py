@@ -6,20 +6,24 @@ from src.interfaces import NeedsFuel
 
 
 class CheckFuelCommandFactory(BaseCommandFactory):
-    command = CheckFuelCommand
+    @property
+    def command(self) -> type[CheckFuelCommand]:
+        return CheckFuelCommand
 
-    def create(self) -> CheckFuelCommand:
-        obj: Optional[NeedsFuel] = self._params.get("obj")
+    def create(self, *, params: dict) -> CheckFuelCommand:
+        obj: Optional[NeedsFuel] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
         return self.command(obj=obj)
 
 
 class BurnFuelCommandFactory(BaseCommandFactory):
-    command = BurnFuelCommand
+    @property
+    def command(self) -> type[BurnFuelCommand]:
+        return BurnFuelCommand
 
-    def create(self) -> BurnFuelCommand:
-        obj: Optional[NeedsFuel] = self._params.get("obj")
+    def create(self, *, params: dict) -> BurnFuelCommand:
+        obj: Optional[NeedsFuel] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
         return self.command(obj=obj)

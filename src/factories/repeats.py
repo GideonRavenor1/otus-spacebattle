@@ -6,10 +6,12 @@ from src.factories.base import BaseCommandFactory
 
 
 class FirstRepeatCommandFactory(BaseCommandFactory):
-    command = FirstRepeatCommand
+    @property
+    def command(self) -> type[FirstRepeatCommand]:
+        return FirstRepeatCommand
 
-    def create(self) -> BaseCommand:
-        command: Optional[BaseCommand] = self._params.get("command")
+    def create(self, *, params: dict) -> FirstRepeatCommand:
+        command: Optional[BaseCommand] = params.get("command")
         if command is None:
             raise ValueError("Не указана команда")
         return self.command(command=command)

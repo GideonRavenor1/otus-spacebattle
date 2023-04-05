@@ -6,10 +6,12 @@ from src.interfaces.movements import Rotatable
 
 
 class RotateCommandFactory(BaseCommandFactory):
-    command = RotateCommand
+    @property
+    def command(self) -> type[RotateCommand]:
+        return RotateCommand
 
-    def create(self) -> RotateCommand:
-        obj: Optional[Rotatable] = self._params.get("obj")
+    def create(self, *, params: dict) -> RotateCommand:
+        obj: Optional[Rotatable] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
 

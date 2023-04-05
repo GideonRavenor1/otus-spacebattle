@@ -6,10 +6,12 @@ from src.factories.base import BaseCommandFactory
 
 
 class ExceptionLoggingCommandFactory(BaseCommandFactory):
-    command = ExceptionLoggingCommand
+    @property
+    def command(self) -> type[ExceptionLoggingCommand]:
+        return ExceptionLoggingCommand
 
-    def create(self) -> ExceptionLoggingCommand:
-        exception: Optional[Exception] = self._params.get("exception")
+    def create(self, *, params: dict) -> ExceptionLoggingCommand:
+        exception: Optional[Exception] = params.get("exception")
         if exception is None:
             raise ValueError("Не указано исключение")
         return self.command(exception=exception)
