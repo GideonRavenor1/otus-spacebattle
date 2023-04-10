@@ -10,7 +10,7 @@ class ExceptionLoggingCommandFactory(BaseCommandFactory):
     def command(self) -> type[ExceptionLoggingCommand]:
         return ExceptionLoggingCommand
 
-    def create(self, *, params: dict) -> ExceptionLoggingCommand:
+    def __call__(self, *, params: dict) -> ExceptionLoggingCommand:
         exception: Optional[Exception] = params.get("exception")
         if exception is None:
             raise ValueError("Не указано исключение")

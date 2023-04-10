@@ -21,7 +21,7 @@ class ForwardMacroCommandFactory(BaseCommandFactory):
     def command(self) -> type[ForwardMacroCommand]:
         return ForwardMacroCommand
 
-    def create(self, *, params: dict) -> ForwardMacroCommand:
+    def __call__(self, *, params: dict) -> ForwardMacroCommand:
         obj: Optional[T_MN] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
@@ -38,7 +38,7 @@ class ForwardWithRotateCommandFactory(BaseCommandFactory):
     def command(self) -> type[ForwardWithRotateMacroCommand]:
         return ForwardWithRotateMacroCommand
 
-    def create(self, *, params: dict) -> ForwardWithRotateMacroCommand:
+    def __call__(self, *, params: dict) -> ForwardWithRotateMacroCommand:
         obj: Optional[T_MNR] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")

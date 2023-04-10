@@ -1,7 +1,7 @@
 import pytest
 
+from src.dependencies import container
 from src.exceptions import CommandException
-from src.factories import COMMAND_FACTORIES
 from src.vectors import Vector
 from tests.utils import get_game_object
 
@@ -20,7 +20,7 @@ def test_forward_movement_valid_params() -> None:
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    macro_command = COMMAND_FACTORIES["forward"].create(params=params)
+    macro_command = container["forward"](params=params)
     macro_command.execute()
 
     assert mock_space_ship_obj.get_position() == Vector(5, 8)
@@ -41,7 +41,7 @@ def test_forward_movement_if_not_enough_fuel() -> None:
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    macro_command = COMMAND_FACTORIES["forward"].create(params=params)
+    macro_command = container["forward"](params=params)
     with pytest.raises(CommandException):
         macro_command.execute()
 
@@ -60,6 +60,6 @@ def test_forward_movement_if_object_remains_in_place() -> None:
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    macro_command = COMMAND_FACTORIES["forward"].create(params=params)
+    macro_command = container["forward"](params=params)
     with pytest.raises(CommandException):
         macro_command.execute()

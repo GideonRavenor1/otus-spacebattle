@@ -10,7 +10,7 @@ class CheckFuelCommandFactory(BaseCommandFactory):
     def command(self) -> type[CheckFuelCommand]:
         return CheckFuelCommand
 
-    def create(self, *, params: dict) -> CheckFuelCommand:
+    def __call__(self, *, params: dict) -> CheckFuelCommand:
         obj: Optional[NeedsFuel] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
@@ -22,7 +22,7 @@ class BurnFuelCommandFactory(BaseCommandFactory):
     def command(self) -> type[BurnFuelCommand]:
         return BurnFuelCommand
 
-    def create(self, *, params: dict) -> BurnFuelCommand:
+    def __call__(self, *, params: dict) -> BurnFuelCommand:
         obj: Optional[NeedsFuel] = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")

@@ -10,7 +10,7 @@ class FirstRepeatCommandFactory(BaseCommandFactory):
     def command(self) -> type[FirstRepeatCommand]:
         return FirstRepeatCommand
 
-    def create(self, *, params: dict) -> FirstRepeatCommand:
+    def __call__(self, *, params: dict) -> FirstRepeatCommand:
         command: Optional[BaseCommand] = params.get("command")
         if command is None:
             raise ValueError("Не указана команда")

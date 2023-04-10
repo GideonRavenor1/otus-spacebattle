@@ -1,6 +1,6 @@
 import pytest
 
-from src.factories import COMMAND_FACTORIES
+from src.dependencies import container
 from src.exceptions import ReadPositionException, ReadVelocityException, SetPositionException
 from src.vectors import Vector
 from tests.utils import get_game_object
@@ -16,7 +16,7 @@ def test_move_valid_params() -> None:
 
     mock_movable_obj = get_game_object(data=mock_obj)
     params = {"obj": mock_movable_obj}
-    COMMAND_FACTORIES["move"].create(params=params).execute()
+    container["move"](params=params).execute()
 
     assert mock_movable_obj.get_position() == Vector(5, 8)
 
@@ -40,7 +40,7 @@ def test_move_impossible_read_position() -> None:
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(ReadPositionException):
-        COMMAND_FACTORIES["move"].create(params=params).execute()
+        container["move"](params=params).execute()
 
 
 def test_move_if_object_remains_in_place() -> None:
@@ -54,7 +54,7 @@ def test_move_if_object_remains_in_place() -> None:
 
     params = {"obj": mock_movable_obj}
     with pytest.raises(SetPositionException):
-        COMMAND_FACTORIES["move"].create(params=params).execute()
+        container["move"](params=params).execute()
 
 
 def test_move_impossible_read_velocity() -> None:
@@ -76,7 +76,7 @@ def test_move_impossible_read_velocity() -> None:
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(ReadVelocityException):
-        COMMAND_FACTORIES["move"].create(params=params).execute()
+        container["move"](params=params).execute()
 
 
 def test_move_impossible_set_position() -> None:
@@ -98,4 +98,4 @@ def test_move_impossible_set_position() -> None:
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(SetPositionException):
-        COMMAND_FACTORIES["move"].create(params=params).execute()
+        container["move"](params=params).execute()

@@ -5,7 +5,7 @@ from src.commands import BaseCommand
 
 class BaseCommandFactory(ABC):
     @abstractmethod
-    def create(self, *, params: dict) -> BaseCommand:
+    def __call__(self, *, params: dict) -> BaseCommand:
         raise NotImplementedError
 
     @property

@@ -1,6 +1,6 @@
 from _pytest.logging import LogCaptureFixture
 
-from src.factories import COMMAND_FACTORIES
+from src.dependencies import container
 from src.managers import QueueManager
 from src.vectors import Vector
 from tests.utils import get_game_object
@@ -19,8 +19,8 @@ def test_queue_manager_with_valid_params() -> None:
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    forward_command = COMMAND_FACTORIES["forward"].create(params=params)
-    forward_rotate_command = COMMAND_FACTORIES["forward_with_rotate"].create(params=params)
+    forward_command = container["forward"](params=params)
+    forward_rotate_command = container["forward_with_rotate"](params=params)
 
     commands = [forward_command, forward_rotate_command]
     manager = QueueManager(commands=commands)
@@ -49,8 +49,8 @@ def test_manager_with_not_enough_fuel(caplog: LogCaptureFixture) -> None:
 
     mock_space_ship_obj = get_game_object(data=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    forward_command = COMMAND_FACTORIES["forward"].create(params=params)
-    forward_rotate_command = COMMAND_FACTORIES["forward_with_rotate"].create(params=params)
+    forward_command = container["forward"](params=params)
+    forward_rotate_command = container["forward_with_rotate"](params=params)
 
     commands = [forward_command, forward_rotate_command]
     manager = QueueManager(commands=commands)
