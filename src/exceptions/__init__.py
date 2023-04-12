@@ -1,8 +1,19 @@
-from src.exceptions.command import CommandException
+from src.exceptions.command import CommandException, RepeatException
 from src.exceptions.fuel_dependent import (
-	NoFuelError, ReadFuelLevelError, ReadRequiredFuelLevelError, SetFuelLevelError,
+    NoFuelException,
+    ReadFuelLevelException,
+    ReadRequiredFuelLevelException,
+    SetFuelLevelException,
 )
-from src.exceptions.move import ReadPositionError, ReadVelocityError, SetPositionError, SetVelocityError
+from src.exceptions.move import (
+    ReadPositionException,
+    ReadVelocityException,
+    SetPositionException,
+    SetVelocityException,
+)
 from src.exceptions.rotate import (
-	RaedDirectionNumberError, ReadAngularVelocityError, ReadDirectionError, SetDirectionError,
+    RaedDirectionNumberException,
+    ReadAngularVelocityException,
+    ReadDirectionException,
+    SetDirectionException,
 )
