@@ -11,6 +11,6 @@ def test_logging_command(caplog: LogCaptureFixture) -> None:
     exception = TypeError("Ошибка при выполнении команды")
     params = {"exception": exception}
 
-    command = container.resolve("log_exception", params=params)
+    command = container.resolve("command.log_exception", params=params)
     command.execute()
     assert "Ошибка при выполнении команды" in caplog.text

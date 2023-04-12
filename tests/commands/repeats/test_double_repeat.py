@@ -14,10 +14,10 @@ def test_double_repeat_valid_params() -> None:
     mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
     mock_movable_obj = get_game_object(data=mock_obj)
     move_params = {"obj": mock_movable_obj}
-    command = container.resolve("move", params=move_params)
+    command = container.resolve("command.move", params=move_params)
 
     repeat_params = {"command": command}
-    repeat_command = container.resolve("second_repeat", params=repeat_params)
+    repeat_command = container.resolve("command.second_repeat", params=repeat_params)
 
     repeat_command.execute()
 
@@ -42,9 +42,9 @@ def test_double_repeat_raise_exception() -> None:
             return mock_obj["velocity"]
 
     move_params = {"obj": MovableImplementation()}
-    command = container.resolve("move", params=move_params)
+    command = container.resolve("command.move", params=move_params)
 
     repeat_params = {"command": command}
-    repeat_command = container.resolve("second_repeat", params=repeat_params)
+    repeat_command = container.resolve("command.second_repeat", params=repeat_params)
     with pytest.raises(RepeatException):
         repeat_command.execute()

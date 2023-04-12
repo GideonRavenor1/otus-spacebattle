@@ -16,7 +16,7 @@ def test_exception_handler_with_positive_scenario() -> None:
     mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
     mock_movable_obj = get_game_object(data=mock_obj)
     move_params = {"obj": mock_movable_obj}
-    command = container.resolve("move", params=move_params)
+    command = container.resolve("command.move", params=move_params)
 
     handler.handle(command, SetPositionException("Объект не сдвинулся с места"))
 
@@ -32,7 +32,7 @@ def test_exception_handler_with_negative_scenario(caplog: LogCaptureFixture) -> 
     mock_obj = {"position": Vector(12, 5), "velocity": Vector(0, 0)}
     mock_movable_obj = get_game_object(data=mock_obj)
     move_params = {"obj": mock_movable_obj}
-    command = container.resolve("move", params=move_params)
+    command = container.resolve("command.move", params=move_params)
 
     handler.handle(command, SetPositionException("Объект не сдвинулся с места"))
 

@@ -7,7 +7,7 @@ from src.exceptions import ResolveDependencyException
 class IoCContainer(UserDict):
     def __init__(self) -> None:
         super().__init__()
-        self.data["register"] = lambda params: RegisterCommand(
+        self.data["ioc.register"] = lambda params: RegisterCommand(
             ioc_container=self,
             obj_name=params["obj_name"],
             obj=params["obj"],

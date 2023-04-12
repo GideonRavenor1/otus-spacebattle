@@ -14,16 +14,34 @@ from src.factories import (
 
 container = IoCContainer()
 
-container.resolve(object_name="register", params={"obj_name": "forward", "obj": ForwardMacroCommandFactory()})
 container.resolve(
-    object_name="register",
-    params={"obj_name": "forward_with_rotate", "obj": ForwardWithRotateCommandFactory()},
+    object_name="ioc.register",
+    params={"obj_name": "command.forward", "obj": ForwardMacroCommandFactory()},
 )
-container.resolve(object_name="register", params={"obj_name": "check_fuel", "obj": CheckFuelCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "burn_fuel", "obj": BurnFuelCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "first_repeat", "obj": FirstRepeatCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "second_repeat", "obj": SecondRepeatCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "rotate", "obj": RotateCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "move", "obj": MoveCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "change_velocity", "obj": ChangeVelocityCommandFactory()})
-container.resolve(object_name="register", params={"obj_name": "log_exception", "obj": ExceptionLoggingCommandFactory()})
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.forward_with_rotate", "obj": ForwardWithRotateCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.check_fuel", "obj": CheckFuelCommandFactory()},
+)
+container.resolve(object_name="ioc.register", params={"obj_name": "command.burn_fuel", "obj": BurnFuelCommandFactory()})
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.first_repeat", "obj": FirstRepeatCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.second_repeat", "obj": SecondRepeatCommandFactory()},
+)
+container.resolve(object_name="ioc.register", params={"obj_name": "command.rotate", "obj": RotateCommandFactory()})
+container.resolve(object_name="ioc.register", params={"obj_name": "command.move", "obj": MoveCommandFactory()})
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.change_velocity", "obj": ChangeVelocityCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.log_exception", "obj": ExceptionLoggingCommandFactory()},
+)
