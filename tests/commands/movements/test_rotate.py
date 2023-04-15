@@ -1,6 +1,6 @@
 import pytest
 
-from src.commands import RotateCommand
+from src.dependencies import container
 from src.exceptions import (
     RaedDirectionNumberException,
     ReadAngularVelocityException,
@@ -22,7 +22,8 @@ def test_rotate_valid_param(direction: int, angular_velocity: int, direction_num
     mock_obj = {"direction": direction, "angular_velocity": angular_velocity, "direction_number": direction_number}
 
     mock_rotate = get_game_object(data=mock_obj)
-    RotateCommand(obj=mock_rotate).execute()
+    params = {"obj": mock_rotate}
+    container.resolve("command.rotate", params=params).execute()
 
     assert mock_rotate.get_direction() == expected
 
@@ -47,9 +48,9 @@ def test_rotate_impossible_read_direction() -> None:
         def set_direction(self, value: int) -> None:
             mock_obj["direction"] = value
 
-    mock_rotate = RotatableImplementation()
+    params = {"obj": RotatableImplementation()}
     with pytest.raises(ReadDirectionException):
-        RotateCommand(obj=mock_rotate).execute()
+        container.resolve("command.rotate", params=params).execute()
 
 
 def test_rotate_impossible_read_angular_velocity() -> None:
@@ -72,9 +73,9 @@ def test_rotate_impossible_read_angular_velocity() -> None:
         def set_direction(self, value: int) -> None:
             mock_obj["direction"] = value
 
-    mock_rotate = RotatableImplementation()
+    params = {"obj": RotatableImplementation()}
     with pytest.raises(ReadAngularVelocityException):
-        RotateCommand(obj=mock_rotate).execute()
+        container.resolve("command.rotate", params=params).execute()
 
 
 def test_rotate_impossible_set_direction() -> None:
@@ -97,9 +98,9 @@ def test_rotate_impossible_set_direction() -> None:
         def set_direction(self, value: int) -> None:
             raise SetDirectionException
 
-    mock_rotate = RotatableImplementation()
+    params = {"obj": RotatableImplementation()}
     with pytest.raises(SetDirectionException):
-        RotateCommand(obj=mock_rotate).execute()
+        container.resolve("command.rotate", params=params).execute()
 
 
 def test_rotate_impossible_read_direction_number() -> None:
@@ -122,6 +123,6 @@ def test_rotate_impossible_read_direction_number() -> None:
         def set_direction(self, value: int) -> None:
             mock_obj["direction_number"] = value
 
-    mock_rotate = RotatableImplementation()
+    params = {"obj": RotatableImplementation()}
     with pytest.raises(RaedDirectionNumberException):
-        RotateCommand(obj=mock_rotate).execute()
+        container.resolve("command.rotate", params=params).execute()

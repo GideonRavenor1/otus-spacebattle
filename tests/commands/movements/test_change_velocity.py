@@ -1,6 +1,6 @@
 import pytest
 
-from src.commands import ChangeVelocityCommand
+from src.dependencies import container
 from src.exceptions import ReadVelocityException, SetVelocityException
 from src.vectors import Vector
 from tests.utils import get_game_object
@@ -14,7 +14,8 @@ def test_change_velocity_valid_params() -> None:
     mock_obj = {"velocity": Vector(-7, 3), "direction": 100, "angular_velocity": 30, "direction_number": 360}
 
     obj = get_game_object(data=mock_obj)
-    ChangeVelocityCommand(obj).execute()
+    params = {"obj": obj}
+    container.resolve("command.change_velocity", params=params).execute()
 
     assert obj.get_velocity() == Vector(90, 210)
 
@@ -36,8 +37,9 @@ def test_change_velocity_impossible_set_velocity() -> None:
         def get_angular_velocity(self) -> int:
             return mock_obj["angular_velocity"]
 
+    params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(SetVelocityException):
-        ChangeVelocityCommand(ChangeVelocityImplementation()).execute()
+        container.resolve("command.change_velocity", params=params).execute()
 
 
 def test_change_velocity_impossible_read_velocity() -> None:
@@ -57,8 +59,9 @@ def test_change_velocity_impossible_read_velocity() -> None:
         def get_angular_velocity(self) -> int:
             return mock_obj["angular_velocity"]
 
+    params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
-        ChangeVelocityCommand(ChangeVelocityImplementation()).execute()
+        container.resolve("command.change_velocity", params=params).execute()
 
 
 def test_change_velocity_impossible_read_angular_velocity() -> None:
@@ -78,5 +81,6 @@ def test_change_velocity_impossible_read_angular_velocity() -> None:
         def get_angular_velocity(self) -> int:
             return mock_obj["angular_velocity"]
 
+    params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
-        ChangeVelocityCommand(ChangeVelocityImplementation()).execute()
+        container.resolve("command.change_velocity", params=params).execute()

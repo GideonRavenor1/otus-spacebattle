@@ -1,6 +1,6 @@
 import pytest
 
-from src.commands.fuel_dependent import CheckFuelCommand
+from src.dependencies import container
 from src.exceptions import NoFuelException
 from tests.utils import get_game_object
 
@@ -11,9 +11,10 @@ def test_check_fuel_valid_params() -> None:
     """
 
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
+    params = {"obj": get_game_object(data=mock_obj)}
 
     try:
-        CheckFuelCommand(obj=get_game_object(data=mock_obj)).execute()
+        container.resolve("command.check_fuel", params=params).execute()
     except NoFuelException:
         pytest.fail("Unexpected NoFuelError...")
 
@@ -24,6 +25,7 @@ def test_check_fuel_if_not_enough_fuel() -> None:
     """
 
     mock_obj = {"fuel_level": 9, "required_fuel_level": 10}
+    params = {"obj": get_game_object(data=mock_obj)}
 
     with pytest.raises(NoFuelException):
-        CheckFuelCommand(obj=get_game_object(data=mock_obj)).execute()
+        container.resolve("command.check_fuel", params=params).execute()

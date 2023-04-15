@@ -1,6 +1,6 @@
 from _pytest.logging import LogCaptureFixture
 
-from src.commands import ExceptionLoggingCommand
+from src.dependencies import container
 
 
 def test_logging_command(caplog: LogCaptureFixture) -> None:
@@ -9,6 +9,8 @@ def test_logging_command(caplog: LogCaptureFixture) -> None:
     """
 
     exception = TypeError("Ошибка при выполнении команды")
-    command = ExceptionLoggingCommand(exception=exception)
+    params = {"exception": exception}
+
+    command = container.resolve("command.log_exception", params=params)
     command.execute()
     assert "Ошибка при выполнении команды" in caplog.text

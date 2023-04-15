@@ -1,6 +1,6 @@
 import pytest
 
-from src.commands import BurnFuelCommand
+from src.dependencies import container
 from src.exceptions import ReadFuelLevelException, ReadRequiredFuelLevelException, SetFuelLevelException
 from tests.utils import get_game_object
 
@@ -13,7 +13,8 @@ def test_burn_fuel_valid_params() -> None:
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
 
     mock_burning_fuel_obj = get_game_object(data=mock_obj)
-    BurnFuelCommand(obj=mock_burning_fuel_obj).execute()
+    params = {"obj": mock_burning_fuel_obj}
+    container.resolve("command.burn_fuel", params=params).execute()
 
     assert mock_burning_fuel_obj.get_fuel_level() == 90
 
@@ -35,8 +36,10 @@ def test_burn_fuel_impossible_read_fuel_level() -> None:
         def get_required_fuel_level(self) -> int:
             return mock_obj["required_fuel_level"]
 
+    params = {"obj": BurnFuelImplementation()}
+
     with pytest.raises(ReadFuelLevelException):
-        BurnFuelCommand(obj=BurnFuelImplementation()).execute()
+        container.resolve("command.burn_fuel", params=params).execute()
 
 
 def test_burn_fuel_impossible_set_fuel_level() -> None:
@@ -56,8 +59,10 @@ def test_burn_fuel_impossible_set_fuel_level() -> None:
         def get_required_fuel_level(self) -> int:
             return mock_obj["required_fuel_level"]
 
+    params = {"obj": BurnFuelImplementation()}
+
     with pytest.raises(SetFuelLevelException):
-        BurnFuelCommand(obj=BurnFuelImplementation()).execute()
+        container.resolve("command.burn_fuel", params=params).execute()
 
 
 def test_burn_fuel_impossible_read_required_fuel_level() -> None:
@@ -77,5 +82,6 @@ def test_burn_fuel_impossible_read_required_fuel_level() -> None:
         def get_required_fuel_level(self) -> int:
             raise ReadRequiredFuelLevelException
 
+    params = {"obj": BurnFuelImplementation()}
     with pytest.raises(ReadRequiredFuelLevelException):
-        BurnFuelCommand(obj=BurnFuelImplementation()).execute()
+        container.resolve("command.burn_fuel", params=params).execute()

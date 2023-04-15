@@ -1,4 +1,9 @@
-from src.exceptions.command import CommandException, RepeatException
+from src.exceptions.command import (
+    CommandException,
+    RegisterCommandException,
+    RepeatException,
+    ResolveDependencyException,
+)
 from src.exceptions.fuel_dependent import (
     NoFuelException,
     ReadFuelLevelException,
