@@ -16,6 +16,7 @@ from src.exceptions.move import (
     SetPositionException,
     SetVelocityException,
 )
+from src.exceptions.multithreading import SoftStop, HardStop
 from src.exceptions.rotate import (
     RaedDirectionNumberException,
     ReadAngularVelocityException,
