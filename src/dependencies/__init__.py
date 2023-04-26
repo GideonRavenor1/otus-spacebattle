@@ -10,6 +10,10 @@ from src.factories import (
     MoveCommandFactory,
     RotateCommandFactory,
     SecondRepeatCommandFactory,
+    SoftStopCommandFactory,
+    ThreadCommandFactory,
+    QueueCommandFactory,
+    HardStopCommandFactory,
 )
 
 container = IoCContainer()
@@ -53,4 +57,20 @@ container.resolve(
 container.resolve(
     object_name="ioc.register",
     params={"obj_name": "command.log_exception", "obj": ExceptionLoggingCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.soft_stop", "obj": SoftStopCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.hard_stop", "obj": HardStopCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.to_thread", "obj": ThreadCommandFactory()},
+)
+container.resolve(
+    object_name="ioc.register",
+    params={"obj_name": "command.get_queue", "obj": QueueCommandFactory()},
 )
