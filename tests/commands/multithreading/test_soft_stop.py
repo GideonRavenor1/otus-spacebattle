@@ -34,6 +34,7 @@ def test_soft_stop_with_valid_params() -> None:
 
     thread_command = container.resolve("command.to_thread", params={"queue": queue})
     thread_command.execute()
+    thread_command.thread.join()
 
     assert mock_space_ship_obj.get_position() == Vector(-2, 11)
     assert mock_space_ship_obj.get_fuel_level() == 70
