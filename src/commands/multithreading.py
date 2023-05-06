@@ -25,12 +25,22 @@ class ThreadCommand(BaseCommand):
     def execute(self) -> None:
         self._thread.start()
 
+    @property
+    def thread(self) -> Thread:
+        return self._thread
+
 
 class SoftStopCommand(BaseCommand):
+    def __init__(self, *args, **kwargs) -> None:
+        ...
+
     def execute(self) -> None:
-        raise SoftStop
+        raise SoftStop("Мягкая остановка очереди")
 
 
 class HardStopCommand(BaseCommand):
+    def __init__(self, *args, **kwargs) -> None:
+        ...
+
     def execute(self) -> None:
-        raise HardStop
+        raise HardStop("Жесткая остановка очереди")

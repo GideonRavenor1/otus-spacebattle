@@ -3,7 +3,6 @@ import pytest
 from src.dependencies import container
 from src.exceptions import CommandException
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_moving_forward_with_rotate_valid_params() -> None:
@@ -12,8 +11,8 @@ def test_moving_forward_with_rotate_valid_params() -> None:
     """
 
     mock_obj = {
-        "position": Vector(12, 5),
-        "velocity": Vector(-7, 3),
+        "position": [12, 5],
+        "velocity": [-7, 3],
         "fuel_level": 100,
         "required_fuel_level": 10,
         "direction": 100,
@@ -21,7 +20,7 @@ def test_moving_forward_with_rotate_valid_params() -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = get_game_object(data=mock_obj)
+    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
     macro_command = container.resolve("command.forward_with_rotate", params=params)
     macro_command.execute()
@@ -37,13 +36,13 @@ def test_forward_movement_if_not_enough_fuel() -> None:
     """
 
     mock_obj = {
-        "position": Vector(12, 5),
-        "velocity": Vector(-7, 3),
+        "position": [12, 5],
+        "velocity": [-7, 3],
         "fuel_level": 19,
         "required_fuel_level": 10,
     }
 
-    mock_space_ship_obj = get_game_object(data=mock_obj)
+    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
     macro_command = container.resolve("command.forward_with_rotate", params=params)
     with pytest.raises(CommandException):
@@ -56,13 +55,13 @@ def test_forward_movement_if_object_remains_in_place() -> None:
     """
 
     mock_obj = {
-        "position": Vector(12, 5),
-        "velocity": Vector(0, 0),
+        "position": [12, 5],
+        "velocity": [0, 0],
         "fuel_level": 100,
         "required_fuel_level": 10,
     }
 
-    mock_space_ship_obj = get_game_object(data=mock_obj)
+    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
     macro_command = container.resolve("command.forward_with_rotate", params=params)
     with pytest.raises(CommandException):

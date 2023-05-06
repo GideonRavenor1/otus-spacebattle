@@ -1,3 +1,5 @@
+from threading import Lock
+
 from abc import ABC, abstractmethod
 from typing import Optional
 
@@ -5,6 +7,8 @@ from src.exceptions import CommandException
 
 
 class BaseCommand(ABC):
+    lock = Lock()
+
     @abstractmethod
     def execute(self) -> None:
         raise NotImplementedError

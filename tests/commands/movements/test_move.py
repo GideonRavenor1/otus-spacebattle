@@ -3,7 +3,6 @@ import pytest
 from src.dependencies import container
 from src.exceptions import ReadPositionException, ReadVelocityException, SetPositionException
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_move_valid_params() -> None:
@@ -12,9 +11,12 @@ def test_move_valid_params() -> None:
     движение меняет положение объекта на (5, 8)
     """
 
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
+    mock_obj = {
+        "position": [12, 5],
+        "velocity": [-7, 3],
+    }
 
-    mock_movable_obj = get_game_object(data=mock_obj)
+    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_movable_obj}
     container.resolve("command.move", params=params).execute()
 
@@ -48,9 +50,12 @@ def test_move_if_object_remains_in_place() -> None:
     После сдвига объекта он остается на месте.
     """
 
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(0, 0)}
+    mock_obj = {
+        "position": [12, 5],
+        "velocity": [0, 0],
+    }
 
-    mock_movable_obj = get_game_object(data=mock_obj)
+    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
 
     params = {"obj": mock_movable_obj}
     with pytest.raises(SetPositionException):

@@ -3,7 +3,6 @@ import pytest
 from src.dependencies import container
 from src.exceptions import ReadPositionException, RepeatException
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_double_repeat_valid_params() -> None:
@@ -11,8 +10,8 @@ def test_double_repeat_valid_params() -> None:
     Проверяем, что команда повторяется и сдвигает объект с места
     """
 
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
-    mock_movable_obj = get_game_object(data=mock_obj)
+    mock_obj = {"position": [12, 5], "velocity": [-7, 3]}
+    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
     command = container.resolve("command.move", params=move_params)
 

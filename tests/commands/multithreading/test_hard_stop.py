@@ -2,7 +2,6 @@ from queue import Queue
 
 from src.dependencies import container
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_hard_stop_with_valid_params() -> None:
@@ -12,8 +11,8 @@ def test_hard_stop_with_valid_params() -> None:
     """
 
     mock_obj = {
-        "position": Vector(12, 5),
-        "velocity": Vector(-7, 3),
+        "position": [12, 5],
+        "velocity": [-7, 3],
         "fuel_level": 100,
         "required_fuel_level": 10,
         "direction": 100,
@@ -21,7 +20,7 @@ def test_hard_stop_with_valid_params() -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = get_game_object(data=mock_obj)
+    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
 
     forward_command = container.resolve("command.forward", params=params)

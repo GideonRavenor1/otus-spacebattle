@@ -1,6 +1,6 @@
 from src.exceptions.command import (
     CommandException,
-    RegisterCommandException,
+    RegisterObjectException,
     RepeatException,
     ResolveDependencyException,
 )

@@ -3,7 +3,6 @@ import pytest
 from src.dependencies import container
 from src.exceptions import ReadDirectionException, RepeatException
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_repeat_valid_params() -> None:
@@ -12,7 +11,7 @@ def test_repeat_valid_params() -> None:
     """
 
     mock_obj = {"direction": 250, "angular_velocity": 30, "direction_number": 360}
-    mock_rotate_obj = get_game_object(data=mock_obj)
+    mock_rotate_obj = container.resolve("game.objects.create", params=mock_obj)
     rotate_params = {"obj": mock_rotate_obj}
     command = container.resolve("command.rotate", params=rotate_params)
 

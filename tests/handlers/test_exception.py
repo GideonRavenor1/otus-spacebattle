@@ -4,7 +4,6 @@ from src.dependencies import container
 from src.exceptions import SetPositionException
 from src.handlers import ExceptionHandler
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_exception_handler_with_positive_scenario() -> None:
@@ -13,8 +12,8 @@ def test_exception_handler_with_positive_scenario() -> None:
     """
 
     handler = ExceptionHandler()
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
-    mock_movable_obj = get_game_object(data=mock_obj)
+    mock_obj = {"position": [12, 5], "velocity": [-7, 3]}
+    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
     command = container.resolve("command.move", params=move_params)
 
@@ -29,8 +28,8 @@ def test_exception_handler_with_negative_scenario(caplog: LogCaptureFixture) -> 
     """
 
     handler = ExceptionHandler()
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(0, 0)}
-    mock_movable_obj = get_game_object(data=mock_obj)
+    mock_obj = {"position": [12, 5], "velocity": [0, 0]}
+    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
     command = container.resolve("command.move", params=move_params)
 
