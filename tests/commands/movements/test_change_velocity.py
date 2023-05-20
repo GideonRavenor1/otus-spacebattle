@@ -3,7 +3,6 @@ import pytest
 from src.dependencies import container
 from src.exceptions import ReadVelocityException, SetVelocityException
 from src.vectors import Vector
-from tests.utils import get_game_object
 
 
 def test_change_velocity_valid_params() -> None:
@@ -11,9 +10,9 @@ def test_change_velocity_valid_params() -> None:
     Проверка модификации вектора мгновенной скорости при повороте.
     """
 
-    mock_obj = {"velocity": Vector(-7, 3), "direction": 100, "angular_velocity": 30, "direction_number": 360}
+    mock_obj = {"velocity": [-7, 3], "direction": 100, "angular_velocity": 30, "direction_number": 360}
 
-    obj = get_game_object(data=mock_obj)
+    obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": obj}
     container.resolve("command.change_velocity", params=params).execute()
 

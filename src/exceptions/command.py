@@ -6,7 +6,7 @@ class RepeatException(Exception):
     """Ошибка при повторном выполнении команды"""
 
 
-class RegisterCommandException(Exception):
+class RegisterObjectException(Exception):
     """Ошибка при регистрации объекта"""
 
 

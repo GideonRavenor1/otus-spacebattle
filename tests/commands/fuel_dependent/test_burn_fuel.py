@@ -2,7 +2,6 @@ import pytest
 
 from src.dependencies import container
 from src.exceptions import ReadFuelLevelException, ReadRequiredFuelLevelException, SetFuelLevelException
-from tests.utils import get_game_object
 
 
 def test_burn_fuel_valid_params() -> None:
@@ -12,7 +11,7 @@ def test_burn_fuel_valid_params() -> None:
 
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
 
-    mock_burning_fuel_obj = get_game_object(data=mock_obj)
+    mock_burning_fuel_obj = container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_burning_fuel_obj}
     container.resolve("command.burn_fuel", params=params).execute()
 

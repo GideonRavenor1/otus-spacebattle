@@ -8,4 +8,5 @@ class ExceptionLoggingCommand(BaseCommand):
 
     def execute(self) -> None:
         msg = f"{type(self._exception).__name__}: {self._exception}"
-        logger.exception(msg, exc_info=False)
+        with self.lock:
+            logger.exception(msg, exc_info=False)

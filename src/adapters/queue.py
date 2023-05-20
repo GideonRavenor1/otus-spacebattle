@@ -3,6 +3,7 @@ from queue import Queue
 from src.commands import BaseCommand
 from src.exceptions import HardStop, SoftStop
 from src.handlers import ExceptionHandler
+from src.logger.settings import logger
 
 
 class QueueAdapter:
@@ -36,8 +37,12 @@ class QueueAdapter:
             try:
                 command.execute()
             except SoftStop:
+                with command.lock:
+                    logger.info("Мягкая остановка очереди")
                 self.stop_soft()
             except HardStop:
+                with command.lock:
+                    logger.info("Жесткая остановка очереди")
                 self.stop_hard()
             except Exception as exception:
                 self._exception_handler.handle(command, exception)

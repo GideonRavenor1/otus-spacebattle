@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.15-management
+    container_name: otus-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+
+
+volumes:
+  rabbitmq_data:

@@ -18,6 +18,7 @@ def get_logger() -> logging.Logger:
     file_handler.setLevel(level=logging.INFO)
 
     logger_.addHandler(file_handler)
+    logger_.setLevel(level=logging.INFO)
     return logger_
 
 

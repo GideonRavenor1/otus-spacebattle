@@ -10,7 +10,8 @@ class FirstRepeatCommand(BaseCommand):
         try:
             self._command.execute()
         except Exception as ex:
-            raise RepeatException(str(ex))
+            msg = f"{type(ex).__name__}, {str(ex)}"
+            raise RepeatException(msg)
 
 
 class SecondRepeatCommand(FirstRepeatCommand):
