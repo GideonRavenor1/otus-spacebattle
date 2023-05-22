@@ -3,13 +3,15 @@
 
 
 repos:
--   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.265
-    hooks:
-    -   id: ruff
-        language_version: python3.11
 
--   repo: https://github.com/psf/black
+  - repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
-    -   id: black
+      - id: black
+        language_version: python3.11
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.269
+    hooks:
+      - id: ruff
+        language_version: python3.11
