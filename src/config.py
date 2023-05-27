@@ -10,7 +10,7 @@ ENV_PATH = Path(__file__).parent.resolve() / ".env"
 load_dotenv(dotenv_path=ENV_PATH)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Settings:
     AMQP_URL: str
     CLIENT_QUEUE: str
