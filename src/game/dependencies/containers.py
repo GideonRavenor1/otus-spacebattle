@@ -1,5 +1,5 @@
 from collections import UserDict
-from typing import Any, Optional
+from typing import Any
 
 from src.game.commands import RegisterObject
 
@@ -18,7 +18,7 @@ class IoCContainer(UserDict):
             obj_map_name=params.get("object_map_name"),
         ).execute()
 
-    def resolve(self, object_name: str, params: Optional[dict] = None) -> Any:
+    def resolve(self, object_name: str, params: dict | None = None) -> Any:
         if object_name in self.objects_map:
             return self[self.objects_map[object_name]](params=params)
 

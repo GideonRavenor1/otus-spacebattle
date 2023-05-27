@@ -9,9 +9,12 @@
 Формат сообщений:
 ```json
 {
+  "user_id": 1, // Парситься всегда
+  "token": "str", // Парситься всегда, кроме action get_token
   "game_id": "str",  // id игры. Задает клиент, что бы можно было по нему обращаться в дальнейшем
   "action": "str",  //  Действие. Всего 3 варианта [register_game, start_game, execute_command]
   "command_name": "str", // Парсится только в случае указания execute_command
+  "user_ids": [1, 2, 3], // Парсится только в случае регистрации игры
   "objects": [     // Парсится только в случание register_game
     {
       "position": [12, 5],

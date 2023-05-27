@@ -1,5 +1,5 @@
 from src.game.commands.base import BaseCommand
-from src.game.logger.settings import logger
+from src.logger import logger
 
 
 class ExceptionLoggingCommand(BaseCommand):

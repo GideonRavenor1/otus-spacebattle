@@ -18,7 +18,7 @@ class InterpretCommandFactory(BaseCommandFactory):
         ioc_container: Optional["IoCContainer"] = params.get("ioc_container")
         self._check_obj(obj=ioc_container, name="ioc_container")
 
-        command_name: Optional[str] = params.get("command_name")
+        command_name: str | None = params.get("command_name")
         self._check_obj(obj=command_name, name="command_name")
 
         game_object: Optional["GameObject"] = params.get("game_object")

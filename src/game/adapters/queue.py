@@ -3,7 +3,6 @@ from queue import Queue
 from src.game.commands.base import BaseCommand
 from src.game.exceptions import HardStop, SoftStop
 from src.game.handlers import ExceptionHandler
-from src.game.logger.settings import logger
 
 
 class QueueAdapter:
@@ -34,17 +33,14 @@ class QueueAdapter:
     def __call__(self, *args, **kwargs) -> None:
         while self.can_work:
             command = self._queue.get()
-            try:
-                command.execute()
-            except SoftStop:
-                with command.lock:
-                    logger.info("Мягкая остановка очереди")
-                self.stop_soft()
-            except HardStop:
-                with command.lock:
-                    logger.info("Жесткая остановка очереди")
-                self.stop_hard()
-            except Exception as exception:
-                self._exception_handler.handle(command, exception)
+            with command.lock:
+                try:
+                    command.execute()
+                except SoftStop:
+                    self.stop_soft()
+                except HardStop:
+                    self.stop_hard()
+                except Exception as exception:
+                    self._exception_handler.handle(command, exception)
 
-            self._queue.task_done()
+                self._queue.task_done()

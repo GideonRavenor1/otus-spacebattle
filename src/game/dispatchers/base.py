@@ -1,26 +1,109 @@
+import functools
+import json
+from collections.abc import Callable
 from queue import Queue
+from sqlite3 import Cursor
 from threading import Thread
 from typing import Any
 
+from pika.adapters.blocking_connection import BlockingChannel
+
 from src.game.dependencies import container
+from src.game.exceptions import AuthenticationException
+from src.game.repositories.auth import AuthRepository
+
+
+def token_required(func: Callable) -> Callable:
+    @functools.wraps(func)
+    def _wrapper(self: Dispatcher, params: dict, **kwargs) -> dict:
+        user_id = params.get("user_id")
+        self._check_object(user_id, name="user_id")
+
+        token = params.get("token")
+        self._check_object(token, name="token")
+
+        game_id = params.get("game_id")
+        self._check_object(game_id, name="game_id")
+
+        cursor = self.cursor
+        repository = AuthRepository(cursor=cursor)
+        repository.select_one(token=token, user_id=user_id)
+        return func(self, params=params, **kwargs)
+
+    return _wrapper
+
+
+def checking_invitation(func: Callable) -> Callable:
+    @functools.wraps(func)
+    def _wrapper(self: Dispatcher, params: dict, **kwargs) -> dict:
+        user_id = params.get("user_id")
+        self._check_object(user_id, name="user_id")
+
+        game_id = params.get("game_id")
+        self._check_object(game_id, name="game_id")
+
+        expected_users: list[int] = container.resolve(f"game.namespaces.{game_id}.users")
+
+        if user_id not in expected_users:
+            msg = f"Пользователь не зарегистрирован в игре {game_id}"
+            raise AuthenticationException(msg)
+
+        return func(self, params=params, **kwargs)
+
+    return _wrapper
 
 
 class Dispatcher:
-    def dispatch(self, action: str, params: dict) -> None:
+    def __init__(self, cursor: Cursor) -> None:
+        self._cursor = cursor
+
+    @property
+    def cursor(self) -> Cursor:
+        return self._cursor
+
+    def dispatch(self, action: str, params: dict, auth_queue: str, channel: BlockingChannel) -> dict:
         method = getattr(self, f"_handle_{action}", None)
         if method is None:
             msg = f"Ошибка диспетчеризации, метод {action} не реализован"
             raise ValueError(msg)
 
-        method(params=params)
+        return method(params=params, auth_queue=auth_queue, channel=channel)
 
-    def _handle_register_game(self, params: dict) -> None:
+    def _handle_get_token(self, params: dict, auth_queue: str, channel: BlockingChannel) -> dict:
+        user_id = params.get("user_id")
+        self._check_object(user_id, name="user_id")
+
+        payload = {"user_id": user_id, "action": "get_token"}
+        channel.basic_publish(
+            exchange="",
+            routing_key=auth_queue,
+            body=json.dumps(payload).encode("utf-8"),
+        )
+        return {"action": "get_token", "status": "expect to receive a token"}
+
+    def _handle_save_token(self, params: dict, **kwargs) -> dict:
+        token = params.get("token")
+        self._check_object(token, name="token")
+
+        user_id = params.get("user_id")
+        self._check_object(user_id, name="user_id")
+
+        repository = AuthRepository(cursor=self.cursor)
+        repository.insert(token=token, user_id=user_id)
+        return {"action": "save_token", "status": "ok", "user_id": user_id, "token": token}
+
+    @token_required
+    def _handle_register_game(self, params: dict, **kwargs) -> dict:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
         objects_params = params.get("objects")
         self._check_object(objects_params, name="objects")
 
+        user_ids = params.get("user_ids")
+        self._check_object(user_ids, name="user_ids")
+
+        game_objects = []
         for number, param in enumerate(objects_params, start=1):
             game_object = container.resolve("game.objects.create", params=param)
             container.resolve(
@@ -30,8 +113,23 @@ class Dispatcher:
                     "obj": lambda params: game_object,  # noqa
                 },
             )
+            data = game_object.data
+            data["object_id"] = number
+            game_objects.append(data)
 
-    def _handle_start_game(self, params: dict) -> None:
+        container.resolve(
+            "ioc.register",
+            params={
+                "obj_name": f"game.namespaces.{game_id}.users",
+                "obj": lambda params: user_ids,  # noqa
+            },
+        )
+
+        return {"action": "register_game", "game_id": game_id, "objects": game_objects}
+
+    @token_required
+    @checking_invitation
+    def _handle_start_game(self, params: dict, **kwargs) -> dict:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
@@ -52,8 +150,11 @@ class Dispatcher:
             "ioc.register",
             params={"obj_name": f"game.namespaces.{game_id}.queue", "obj": lambda params: queue},  # noqa
         )
+        return {"action": "start_game", "game_id": game_id}
 
-    def _handle_execute_command(self, params: dict) -> None:
+    @token_required
+    @checking_invitation
+    def _handle_execute_command(self, params: dict, **kwargs) -> dict:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
@@ -80,6 +181,7 @@ class Dispatcher:
             },
         )
         interpret_command.execute()
+        return {"action": "execute_command", "game_id": game_id, "game_object": game_object.data}
 
     @staticmethod
     def _check_object(object_: Any, name: str) -> None:

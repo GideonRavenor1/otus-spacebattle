@@ -1,4 +1,4 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from src.game.commands.base import BaseCommand
 from src.game.exceptions import RegisterObjectException
@@ -14,7 +14,7 @@ class RegisterObject(BaseCommand):
         ioc_container: "IoCContainer",
         obj_name: str,
         obj: object,
-        obj_map_name: Optional[str],
+        obj_map_name: str | None,
         **kwargs,
     ) -> None:
         self._ioc_container = ioc_container

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from src.game.commands import BurnFuelCommand, CheckFuelCommand
 from src.game.factories.base import BaseCommandFactory
 from src.game.interfaces import NeedsFuel
@@ -11,7 +9,7 @@ class CheckFuelCommandFactory(BaseCommandFactory):
         return CheckFuelCommand
 
     def __call__(self, *, params: dict) -> CheckFuelCommand:
-        obj: Optional[NeedsFuel] = params.get("obj")
+        obj: NeedsFuel | None = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
         return self.command(obj=obj)
@@ -23,7 +21,7 @@ class BurnFuelCommandFactory(BaseCommandFactory):
         return BurnFuelCommand
 
     def __call__(self, *, params: dict) -> BurnFuelCommand:
-        obj: Optional[NeedsFuel] = params.get("obj")
+        obj: NeedsFuel | None = params.get("obj")
         if obj is None:
             raise ValueError("Не указан объект")
         return self.command(obj=obj)
