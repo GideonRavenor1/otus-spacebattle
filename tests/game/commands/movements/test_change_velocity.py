@@ -1,6 +1,7 @@
 import pytest
 
-from src.game.dependencies import container
+from src.game.dependencies.command_container import command_container
+from src.game.dependencies.game_objects_container import game_container
 from src.game.exceptions import ReadVelocityException, SetVelocityException
 from src.game.vectors import Vector
 
@@ -12,9 +13,9 @@ def test_change_velocity_valid_params() -> None:
 
     mock_obj = {"velocity": [-7, 3], "direction": 100, "angular_velocity": 30, "direction_number": 360}
 
-    obj = container.resolve("game.objects.create", params=mock_obj)
+    obj = game_container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": obj}
-    container.resolve("command.change_velocity", params=params).execute()
+    command_container.resolve("command.change_velocity", params=params).execute()
 
     assert obj.get_velocity() == Vector(90, 210)
 
@@ -38,7 +39,7 @@ def test_change_velocity_impossible_set_velocity() -> None:
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(SetVelocityException):
-        container.resolve("command.change_velocity", params=params).execute()
+        command_container.resolve("command.change_velocity", params=params).execute()
 
 
 def test_change_velocity_impossible_read_velocity() -> None:
@@ -60,7 +61,7 @@ def test_change_velocity_impossible_read_velocity() -> None:
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
-        container.resolve("command.change_velocity", params=params).execute()
+        command_container.resolve("command.change_velocity", params=params).execute()
 
 
 def test_change_velocity_impossible_read_angular_velocity() -> None:
@@ -82,4 +83,4 @@ def test_change_velocity_impossible_read_angular_velocity() -> None:
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
-        container.resolve("command.change_velocity", params=params).execute()
+        command_container.resolve("command.change_velocity", params=params).execute()

@@ -127,5 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-src/game/logger/logger.log
+src/logger/logger.log
 .ruff_cache

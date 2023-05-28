@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from src.game.exceptions import (
     RaedDirectionNumberException,
     ReadAngularVelocityException,
@@ -83,3 +85,12 @@ class GameObject:
             self._data["velocity"] = vector
         except KeyError:
             raise SetVelocityException("Не удалось установить скорость движения объекта")
+
+    @property
+    def data(self) -> dict:
+        data = deepcopy(self._data)
+        if "position" in data:
+            data["position"]: Vector = data["position"].to_list()
+        if "velocity" in data:
+            data["velocity"]: Vector = data["velocity"].to_list()
+        return data

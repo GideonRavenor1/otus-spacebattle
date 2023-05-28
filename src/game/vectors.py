@@ -28,4 +28,7 @@ class Vector:
     def __str__(self) -> str:
         return f"Vector({self.x}, {self.y})"
 
+    def to_list(self) -> list:
+        return [self.x, self.y]
+
     __repr__ = __str__

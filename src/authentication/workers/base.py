@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class BaseConsumer(ABC):
+class BaseWorker(ABC):
     @abstractmethod
     def start_consuming(self) -> None:
         raise NotImplementedError

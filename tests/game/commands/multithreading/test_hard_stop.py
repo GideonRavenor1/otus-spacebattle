@@ -1,6 +1,7 @@
 from queue import Queue
 
-from src.game.dependencies import container
+from src.game.dependencies.command_container import command_container
+from src.game.dependencies.game_objects_container import game_container
 from src.game.vectors import Vector
 
 
@@ -20,20 +21,20 @@ def test_hard_stop_with_valid_params() -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
 
-    forward_command = container.resolve("command.forward", params=params)
-    hard_stop_command = container.resolve("command.hard_stop", params=params)
-    forward_rotate_command = container.resolve("command.forward_with_rotate", params=params)
+    forward_command = command_container.resolve("command.forward", params=params)
+    hard_stop_command = command_container.resolve("command.hard_stop", params=params)
+    forward_rotate_command = command_container.resolve("command.forward_with_rotate", params=params)
 
     commands = [forward_command, hard_stop_command, forward_rotate_command]
 
-    queue = container.resolve("command.get_queue", params={"queue": Queue()}).execute()
+    queue = command_container.resolve("command.get_queue", params={"queue": Queue()}).execute()
     for command in commands:
         queue.put(command)
 
-    thread_command = container.resolve("command.to_thread", params={"queue": queue})
+    thread_command = command_container.resolve("command.to_thread", params={"queue": queue})
     thread_command.execute()
     thread_command.thread.join()
 

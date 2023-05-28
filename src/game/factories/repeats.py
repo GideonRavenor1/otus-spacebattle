@@ -1,5 +1,3 @@
-from typing import Optional
-
 from src.game.commands import FirstRepeatCommand
 from src.game.commands.base import BaseCommand
 from src.game.factories.base import BaseCommandFactory
@@ -11,9 +9,9 @@ class FirstRepeatCommandFactory(BaseCommandFactory):
         return FirstRepeatCommand
 
     def __call__(self, *, params: dict) -> FirstRepeatCommand:
-        command: Optional[BaseCommand] = params.get("command")
+        command: BaseCommand | None = params.get("command")
         if command is None:
-            raise ValueError("Не указана команда")
+            raise ValueError("Не указана команда BaseCommand")
         return self.command(command=command)
 
 

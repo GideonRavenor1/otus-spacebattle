@@ -1,6 +1,7 @@
 from _pytest.logging import LogCaptureFixture
 
-from src.game.dependencies import container
+from src.game.dependencies.command_container import command_container
+from src.game.dependencies.game_objects_container import game_container
 from src.game.exceptions import SetPositionException
 from src.game.handlers import ExceptionHandler
 from src.game.vectors import Vector
@@ -13,9 +14,9 @@ def test_exception_handler_with_positive_scenario() -> None:
 
     handler = ExceptionHandler()
     mock_obj = {"position": [12, 5], "velocity": [-7, 3]}
-    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_movable_obj = game_container.resolve("game.objects.create", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
-    command = container.resolve("command.move", params=move_params)
+    command = command_container.resolve("command.move", params=move_params)
 
     handler.handle(command, SetPositionException("Объект не сдвинулся с места"))
 
@@ -29,9 +30,9 @@ def test_exception_handler_with_negative_scenario(caplog: LogCaptureFixture) -> 
 
     handler = ExceptionHandler()
     mock_obj = {"position": [12, 5], "velocity": [0, 0]}
-    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_movable_obj = game_container.resolve("game.objects.create", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
-    command = container.resolve("command.move", params=move_params)
+    command = command_container.resolve("command.move", params=move_params)
 
     handler.handle(command, SetPositionException("Объект не сдвинулся с места"))
 
