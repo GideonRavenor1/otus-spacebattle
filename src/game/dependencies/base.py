@@ -2,7 +2,6 @@ from collections import UserDict
 from typing import Any
 
 from src.game.commands import RegisterObject
-
 from src.game.exceptions import ResolveDependencyException
 
 

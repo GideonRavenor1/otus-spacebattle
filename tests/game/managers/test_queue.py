@@ -1,6 +1,7 @@
 from _pytest.logging import LogCaptureFixture
 
-from src.game.dependencies import container
+from src.game.dependencies.command_container import command_container
+from src.game.dependencies.game_objects_container import game_container
 from src.game.managers import QueueManager
 from src.game.vectors import Vector
 
@@ -16,10 +17,10 @@ def test_queue_manager_with_valid_params() -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    forward_command = container.resolve("command.forward", params=params)
-    forward_rotate_command = container.resolve("command.forward_with_rotate", params=params)
+    forward_command = command_container.resolve("command.forward", params=params)
+    forward_rotate_command = command_container.resolve("command.forward_with_rotate", params=params)
 
     commands = [forward_command, forward_rotate_command]
     manager = QueueManager(commands=commands)
@@ -46,10 +47,10 @@ def test_manager_with_not_enough_fuel(caplog: LogCaptureFixture) -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
-    forward_command = container.resolve("command.forward", params=params)
-    forward_rotate_command = container.resolve("command.forward_with_rotate", params=params)
+    forward_command = command_container.resolve("command.forward", params=params)
+    forward_rotate_command = command_container.resolve("command.forward_with_rotate", params=params)
 
     commands = [forward_command, forward_rotate_command]
     manager = QueueManager(commands=commands)

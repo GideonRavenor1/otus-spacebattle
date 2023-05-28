@@ -7,14 +7,15 @@ from typing import Any
 
 from pika.adapters.blocking_connection import BlockingChannel
 
-from src.game.dependencies import container
+from src.game.dependencies.command_container import command_container
+from src.game.dependencies.game_objects_container import game_container
 from src.game.exceptions import AuthenticationException
 from src.game.repositories.base import BaseRepository
 
 
 def token_required(func: Callable) -> Callable:
     @functools.wraps(func)
-    def _wrapper(self: Dispatcher, params: dict, **kwargs) -> dict:
+    def _wrapper(self: "Dispatcher", params: dict, **kwargs) -> dict:
         user_id = params.get("user_id")
         self._check_object(user_id, name="user_id")
 
@@ -33,14 +34,14 @@ def token_required(func: Callable) -> Callable:
 
 def checking_invitation(func: Callable) -> Callable:
     @functools.wraps(func)
-    def _wrapper(self: Dispatcher, params: dict, **kwargs) -> dict:
+    def _wrapper(self: "Dispatcher", params: dict, **kwargs) -> dict:
         user_id = params.get("user_id")
         self._check_object(user_id, name="user_id")
 
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
-        expected_users: list[int] = container.resolve(f"game.namespaces.{game_id}.users")
+        expected_users: list[int] = game_container.resolve(f"game.namespaces.{game_id}.users")
 
         if user_id not in expected_users:
             msg = f"Пользователь не зарегистрирован в игре {game_id}"
@@ -102,8 +103,8 @@ class Dispatcher:
 
         game_objects = []
         for number, param in enumerate(objects_params, start=1):
-            game_object = container.resolve("game.objects.create", params=param)
-            container.resolve(
+            game_object = game_container.resolve("game.objects.create", params=param)
+            game_container.resolve(
                 "ioc.register",
                 params={
                     "obj_name": f"game.namespaces.{game_id}.object_{number}",
@@ -114,7 +115,7 @@ class Dispatcher:
             data["object_id"] = number
             game_objects.append(data)
 
-        container.resolve(
+        game_container.resolve(
             "ioc.register",
             params={
                 "obj_name": f"game.namespaces.{game_id}.users",
@@ -130,12 +131,12 @@ class Dispatcher:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
-        queue = container.resolve("command.get_queue", params={"queue": Queue()}).execute()
+        queue = command_container.resolve("command.get_queue", params={"queue": Queue()}).execute()
 
-        thread_command = container.resolve("command.to_thread", params={"queue": queue})
+        thread_command = command_container.resolve("command.to_thread", params={"queue": queue})
         thread_command.execute()
 
-        container.resolve(
+        game_container.resolve(
             "ioc.register",
             params={
                 "obj_name": f"game.namespaces.{game_id}.tread",
@@ -143,7 +144,7 @@ class Dispatcher:
             },
         )
 
-        container.resolve(
+        game_container.resolve(
             "ioc.register",
             params={"obj_name": f"game.namespaces.{game_id}.queue", "obj": lambda params: queue},  # noqa
         )
@@ -161,17 +162,17 @@ class Dispatcher:
         command_name = params.get("command_name")
         self._check_object(command_name, name="command_name")
 
-        thread: Thread = container.resolve(f"game.namespaces.{game_id}.tread")
+        thread: Thread = game_container.resolve(f"game.namespaces.{game_id}.tread")
         if not thread.is_alive():
             msg = "Игра не запущена или остановлена"
             raise ValueError(msg)
 
-        game_object = container.resolve(f"game.namespaces.{game_id}.object_{object_id}")
-        game_queue = container.resolve(f"game.namespaces.{game_id}.queue")
-        interpret_command = container.resolve(
+        game_object = game_container.resolve(f"game.namespaces.{game_id}.object_{object_id}")
+        game_queue = game_container.resolve(f"game.namespaces.{game_id}.queue")
+        interpret_command = command_container.resolve(
             "command.interpret",
             params={
-                "ioc_container": container,
+                "ioc_container": command_container,
                 "game_object": game_object,
                 "game_queue": game_queue,
                 "command_name": command_name,

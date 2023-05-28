@@ -1,6 +1,7 @@
 import pytest
 
-from src.game.dependencies import container
+from src.game.dependencies.command_container import command_container
+from src.game.dependencies.game_objects_container import game_container
 from src.game.exceptions import ReadPositionException, ReadVelocityException, SetPositionException
 from src.game.vectors import Vector
 
@@ -16,9 +17,9 @@ def test_move_valid_params() -> None:
         "velocity": [-7, 3],
     }
 
-    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_movable_obj = game_container.resolve("game.objects.create", params=mock_obj)
     params = {"obj": mock_movable_obj}
-    container.resolve("command.move", params=params).execute()
+    command_container.resolve("command.move", params=params).execute()
 
     assert mock_movable_obj.get_position() == Vector(5, 8)
 
@@ -42,7 +43,7 @@ def test_move_impossible_read_position() -> None:
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(ReadPositionException):
-        container.resolve("command.move", params=params).execute()
+        command_container.resolve("command.move", params=params).execute()
 
 
 def test_move_if_object_remains_in_place() -> None:
@@ -55,11 +56,11 @@ def test_move_if_object_remains_in_place() -> None:
         "velocity": [0, 0],
     }
 
-    mock_movable_obj = container.resolve("game.objects.create", params=mock_obj)
+    mock_movable_obj = game_container.resolve("game.objects.create", params=mock_obj)
 
     params = {"obj": mock_movable_obj}
     with pytest.raises(SetPositionException):
-        container.resolve("command.move", params=params).execute()
+        command_container.resolve("command.move", params=params).execute()
 
 
 def test_move_impossible_read_velocity() -> None:
@@ -81,7 +82,7 @@ def test_move_impossible_read_velocity() -> None:
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(ReadVelocityException):
-        container.resolve("command.move", params=params).execute()
+        command_container.resolve("command.move", params=params).execute()
 
 
 def test_move_impossible_set_position() -> None:
@@ -103,4 +104,4 @@ def test_move_impossible_set_position() -> None:
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(SetPositionException):
-        container.resolve("command.move", params=params).execute()
+        command_container.resolve("command.move", params=params).execute()

@@ -2,9 +2,10 @@ import sqlite3
 from pathlib import Path
 from sqlite3 import Cursor, Connection
 
-from src.game.factories.repository import AuthRepositoryFactory
-from src.game.factories.workers import RabbitMQGameWorkerFactory
+from src.game.dependencies.services_container import services_container
+from src.game.repositories import AuthRepository
 from src.game.repositories.utils import create_table
+from src.game.workers import RabbitMQGameWorker
 from src.game.workers.base import BaseWorker
 from src.config import get_settings
 
@@ -25,6 +26,10 @@ def main(worker: BaseWorker, connection: Connection, cursor: Cursor) -> None:
 if __name__ == "__main__":
     connection_ = sqlite3.connect(settings.AUTH_DB)
     cursor_ = connection_.cursor()
-    repository = AuthRepositoryFactory()(params={"cursor": cursor_})
-    worker_ = RabbitMQGameWorkerFactory()(params={"repository": repository})
+
+    repository: AuthRepository = services_container.resolve("services.repository.create", params={"cursor": cursor_})
+    worker_: RabbitMQGameWorker = services_container.resolve(
+        "services.workers.create",
+        params={"repository": repository},
+    )
     main(worker_, connection_, cursor_)
