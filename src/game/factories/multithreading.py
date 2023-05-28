@@ -14,7 +14,7 @@ class QueueCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> QueueCommand:
         queue: Optional["Queue"] = params.get("queue")
         if queue is None:
-            raise ValueError("Не указана очередь")
+            raise ValueError("Не указана очередь Queue")
         return self.command(queue=queue)
 
 
@@ -26,7 +26,7 @@ class ThreadCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> ThreadCommand:
         queue: Optional["IQueue"] = params.get("queue")
         if queue is None:
-            raise ValueError("Не указана очередь")
+            raise ValueError("Не указана очередь IQueue")
         return self.command(queue=queue)
 
 

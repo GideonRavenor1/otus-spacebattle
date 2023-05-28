@@ -24,7 +24,7 @@ class ForwardMacroCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> ForwardMacroCommand:
         obj: T_MN | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект Movable | NeedsFuel")
 
         macro_command = self.command()
         macro_command.add(command=CheckFuelCommand(obj=obj))
@@ -41,7 +41,7 @@ class ForwardWithRotateCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> ForwardWithRotateMacroCommand:
         obj: T_MNR | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект Movable | NeedsFuel | Rotatable")
 
         macro_command = self.command()
         macro_command.add(command=CheckFuelCommand(obj=obj))

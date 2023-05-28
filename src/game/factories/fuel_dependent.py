@@ -11,7 +11,7 @@ class CheckFuelCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> CheckFuelCommand:
         obj: NeedsFuel | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект NeedsFuel")
         return self.command(obj=obj)
 
 
@@ -23,5 +23,5 @@ class BurnFuelCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> BurnFuelCommand:
         obj: NeedsFuel | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект NeedsFuel")
         return self.command(obj=obj)

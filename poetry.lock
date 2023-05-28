@@ -211,6 +211,20 @@ tornado = ["tornado"]
 twisted = ["twisted"]
 
 [[package]]
+name = "pika-stubs"
+version = "0.1.3"
+description = "Mypy plugin and stubs for Pika"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pika-stubs-0.1.3.tar.gz", hash = "sha256:aaa78fa9f52eb3591b6073fbbe2607567405d1857be268d447bea252e22dd6cf"},
+]
+
+[package.extras]
+dev = ["flake8 (>=3.8.3,<3.9.0)", "mypy (>=0.780,<1.0)"]
+
+[[package]]
 name = "platformdirs"
 version = "3.5.1"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -433,4 +447,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.3)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "71b395e460869bfd80bb4a12aa3f2a21a30215482b786cbb1498d98e05fc78c0"
+content-hash = "740552b3cc4cb4ce1f37d3734c150268b1743dcaff0aaec950805a364f9c5840"

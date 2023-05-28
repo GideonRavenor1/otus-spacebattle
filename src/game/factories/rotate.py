@@ -11,6 +11,6 @@ class RotateCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> RotateCommand:
         obj: Rotatable | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект Rotatable")
 
         return self.command(obj=obj)

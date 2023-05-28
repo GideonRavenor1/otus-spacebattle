@@ -11,7 +11,7 @@ class FirstRepeatCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> FirstRepeatCommand:
         command: BaseCommand | None = params.get("command")
         if command is None:
-            raise ValueError("Не указана команда")
+            raise ValueError("Не указана команда BaseCommand")
         return self.command(command=command)
 
 

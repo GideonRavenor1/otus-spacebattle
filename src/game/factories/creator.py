@@ -13,5 +13,5 @@ class GameObjectFactory(BaseObjectFactory):
         return self.object(data=params)
 
     @property
-    def object(self) -> type[GameObject]:  # noqa
+    def object(self) -> type[GameObject]:  # noqa A003
         return GameObject

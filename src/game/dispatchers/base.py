@@ -2,7 +2,6 @@ import functools
 import json
 from collections.abc import Callable
 from queue import Queue
-from sqlite3 import Cursor
 from threading import Thread
 from typing import Any
 
@@ -10,7 +9,7 @@ from pika.adapters.blocking_connection import BlockingChannel
 
 from src.game.dependencies import container
 from src.game.exceptions import AuthenticationException
-from src.game.repositories.auth import AuthRepository
+from src.game.repositories.base import BaseRepository
 
 
 def token_required(func: Callable) -> Callable:
@@ -25,8 +24,7 @@ def token_required(func: Callable) -> Callable:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
-        cursor = self.cursor
-        repository = AuthRepository(cursor=cursor)
+        repository = self.repository
         repository.select_one(token=token, user_id=user_id)
         return func(self, params=params, **kwargs)
 
@@ -54,12 +52,12 @@ def checking_invitation(func: Callable) -> Callable:
 
 
 class Dispatcher:
-    def __init__(self, cursor: Cursor) -> None:
-        self._cursor = cursor
+    def __init__(self, repository: BaseRepository) -> None:
+        self._repository = repository
 
     @property
-    def cursor(self) -> Cursor:
-        return self._cursor
+    def repository(self) -> BaseRepository:
+        return self._repository
 
     def dispatch(self, action: str, params: dict, auth_queue: str, channel: BlockingChannel) -> dict:
         method = getattr(self, f"_handle_{action}", None)
@@ -88,8 +86,7 @@ class Dispatcher:
         user_id = params.get("user_id")
         self._check_object(user_id, name="user_id")
 
-        repository = AuthRepository(cursor=self.cursor)
-        repository.insert(token=token, user_id=user_id)
+        self._repository.insert(token=token, user_id=user_id)
         return {"action": "save_token", "status": "ok", "user_id": user_id, "token": token}
 
     @token_required

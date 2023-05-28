@@ -11,7 +11,7 @@ class MoveCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> MoveCommand:
         obj: Movable | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект Movable")
 
         return self.command(obj=obj)
 
@@ -24,6 +24,6 @@ class ChangeVelocityCommandFactory(BaseCommandFactory):
     def __call__(self, *, params: dict) -> ChangeVelocityCommand:
         obj: VelocityChanger | None = params.get("obj")
         if obj is None:
-            raise ValueError("Не указан объект")
+            raise ValueError("Не указан объект VelocityChanger")
 
         return self.command(obj=obj)
