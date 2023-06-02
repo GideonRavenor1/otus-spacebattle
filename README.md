@@ -32,7 +32,7 @@
 
 # Диаграмма взаимодействия сервисов:
 
-![](/home/gideon/projects/otus-spacebattle/services.png)
+![services.png](services.png)![](/home/gideon/projects/otus-spacebattle/services.png)
 
 ## Техническое описание задания:
 При создании данного проекта был сделан упор на соблюдение принципов SOLID, в особенности принцип 
