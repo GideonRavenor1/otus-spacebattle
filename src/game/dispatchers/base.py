@@ -95,25 +95,39 @@ class Dispatcher:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
+        map_size = params.get("map_size")
+        self._check_object(map_size, name="map_size")
+
         objects_params = params.get("objects")
         self._check_object(objects_params, name="objects")
 
         user_ids = params.get("user_ids")
         self._check_object(user_ids, name="user_ids")
 
+        game_map = game_container.resolve("game.objects.create.map", params={"map_size": map_size})
+        game_container.resolve(
+            "ioc.register",
+            params={
+                "obj_name": f"game.namespaces.{game_id}.map",
+                "obj": lambda params: game_map,  # noqa
+            },
+        )
+
         game_objects = []
-        for number, param in enumerate(objects_params, start=1):
-            game_object = game_container.resolve("game.objects.create", params=param)
+        for param in objects_params:
+            game_object = game_container.resolve("game.objects.create.object", params=param)
             game_container.resolve(
                 "ioc.register",
                 params={
-                    "obj_name": f"game.namespaces.{game_id}.object_{number}",
+                    "obj_name": f"game.namespaces.{game_id}.object_{game_object.id}",
                     "obj": lambda params: game_object,  # noqa
                 },
             )
             data = game_object.data
-            data["object_id"] = number
+            data["object_id"] = game_object.id
             game_objects.append(data)
+
+            game_map.set_vector_position(game_object.id, param["x"], param["y"])
 
         game_container.resolve(
             "ioc.register",
@@ -164,10 +178,14 @@ class Dispatcher:
 
         thread: Thread = game_container.resolve(f"game.namespaces.{game_id}.tread")
         if not thread.is_alive():
-            msg = "Игра не запущена или остановлена"
+            msg = f"Игра {game_id} не запущена или остановлена"
             raise ValueError(msg)
 
         game_object = game_container.resolve(f"game.namespaces.{game_id}.object_{object_id}")
+        if not game_object.is_alive():
+            msg = f"Объект {game_object.get_id()} уничтожен"
+            raise ValueError(msg)
+
         game_queue = game_container.resolve(f"game.namespaces.{game_id}.queue")
         interpret_command = command_container.resolve(
             "command.interpret",

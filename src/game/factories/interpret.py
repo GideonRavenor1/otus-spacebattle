@@ -4,7 +4,7 @@ from src.game.commands import InterpretCommand
 from src.game.factories.base import BaseCommandFactory
 
 if TYPE_CHECKING:
-    from src.game.dependencies import IoCContainer
+    from src.game.dependencies.base import IoCContainer
     from src.game.game_object import GameObject
     from src.game.adapters import QueueAdapter
 

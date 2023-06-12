@@ -4,6 +4,12 @@ from src.game.vectors import Vector
 
 
 class Movable(Protocol):
+    def get_id(self) -> str:
+        ...
+
+    def kill(self) -> None:
+        ...
+
     def get_position(self) -> Vector:
         ...
 
@@ -29,6 +35,9 @@ class Rotatable(Protocol):
 
 
 class VelocityChanger(Protocol):
+    def get_id(self) -> str:
+        ...
+
     def get_velocity(self) -> Vector:
         ...
 

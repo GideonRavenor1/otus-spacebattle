@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 
 from src.game.dependencies.command_container import command_container
@@ -12,7 +14,7 @@ def test_double_repeat_valid_params() -> None:
     """
 
     mock_obj = {"position": [12, 5], "velocity": [-7, 3]}
-    mock_movable_obj = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_movable_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
     command = command_container.resolve("command.move", params=move_params)
 
@@ -21,7 +23,7 @@ def test_double_repeat_valid_params() -> None:
 
     repeat_command.execute()
 
-    assert mock_movable_obj.get_position() == Vector(5, 8)
+    assert mock_movable_obj.get_position() == Vector(5, 8, mock_movable_obj.get_id())
 
 
 def test_double_repeat_raise_exception() -> None:
@@ -29,7 +31,9 @@ def test_double_repeat_raise_exception() -> None:
     Проверяем, что при повторных запусков команды в лог выводится сообщение об ошибке
     """
 
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
+    object_id = str(uuid.uuid4())
+
+    mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
 
     class MovableImplementation:
         def get_position(self) -> Vector:

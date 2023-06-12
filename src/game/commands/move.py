@@ -23,5 +23,9 @@ class ChangeVelocityCommand(BaseCommand):
     def execute(self) -> None:
         current_velocity = self._obj.get_velocity()
         delta_direction = self._obj.get_angular_velocity()
-        new_velocity = Vector(current_velocity.y * delta_direction, -current_velocity.x * delta_direction)
+        new_velocity = Vector(
+            current_velocity.y * delta_direction,
+            -current_velocity.x * delta_direction,
+            object_id=self._obj.get_id(),
+        )
         self._obj.set_velocity(new_velocity)

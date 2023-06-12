@@ -15,6 +15,7 @@
   "action": "str",  //  Действие. Всего 3 варианта [register_game, start_game, execute_command]
   "command_name": "str", // Парсится только в случае указания execute_command
   "user_ids": [1, 2, 3], // Парсится только в случае регистрации игры
+  "map_size": [400, 400], // Парсится только в случае регистрации игры
   "objects": [     // Парсится только в случание register_game
     {
       "position": [12, 5],

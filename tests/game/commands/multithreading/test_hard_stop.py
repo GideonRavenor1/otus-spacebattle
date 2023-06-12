@@ -21,7 +21,7 @@ def test_hard_stop_with_valid_params() -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
 
     forward_command = command_container.resolve("command.forward", params=params)
@@ -38,6 +38,6 @@ def test_hard_stop_with_valid_params() -> None:
     thread_command.execute()
     thread_command.thread.join()
 
-    assert mock_space_ship_obj.get_position() == Vector(5, 8)
+    assert mock_space_ship_obj.get_position() == Vector(5, 8, mock_space_ship_obj.get_id())
     assert mock_space_ship_obj.get_fuel_level() == 90
-    assert mock_space_ship_obj.get_velocity() == Vector(-7, 3)
+    assert mock_space_ship_obj.get_velocity() == Vector(-7, 3, mock_space_ship_obj.get_id())
