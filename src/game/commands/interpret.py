@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from src.game.commands.base import BaseCommand
 
 if TYPE_CHECKING:
-    from src.game.dependencies import IoCContainer
+    from src.game.dependencies.base import IoCContainer
     from src.game.game_object import GameObject
     from src.game.adapters import QueueAdapter
 

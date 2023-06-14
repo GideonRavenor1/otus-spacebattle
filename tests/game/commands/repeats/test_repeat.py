@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 
 from src.game.dependencies.command_container import command_container
@@ -12,7 +14,7 @@ def test_repeat_valid_params() -> None:
     """
 
     mock_obj = {"direction": 250, "angular_velocity": 30, "direction_number": 360}
-    mock_rotate_obj = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_rotate_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     rotate_params = {"obj": mock_rotate_obj}
     command = command_container.resolve("command.rotate", params=rotate_params)
 
@@ -27,8 +29,9 @@ def test_repeat_raise_exception() -> None:
     """
     Проверяем, что при повторных запусков команды в лог выводится сообщение об ошибке
     """
+    object_id = str(uuid.uuid4())
 
-    mock_obj = {"position": Vector(12, 5), "velocity": Vector(-7, 3)}
+    mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
 
     class RotatableImplementation:
         def get_direction(self) -> int:

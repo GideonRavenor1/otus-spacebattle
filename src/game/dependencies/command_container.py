@@ -6,7 +6,7 @@ from src.game.factories import (
     ExceptionLoggingCommandFactory,
     FirstRepeatCommandFactory,
     ForwardMacroCommandFactory,
-    ForwardWithRotateCommandFactory,
+    ForwardWithRotateMacroCommandFactory,
     MoveCommandFactory,
     RotateCommandFactory,
     SecondRepeatCommandFactory,
@@ -15,6 +15,7 @@ from src.game.factories import (
     QueueCommandFactory,
     HardStopCommandFactory,
     InterpretCommandFactory,
+    ForwardAndCheckCollisionMacroCommandFactory,
 )
 
 command_container = IoCContainer()
@@ -22,14 +23,34 @@ command_container = IoCContainer()
 
 command_container.resolve(
     object_name="ioc.register",
-    params={"obj_name": "command.forward", "obj": ForwardMacroCommandFactory(), "object_map_name": "forward"},
+    params={
+        "obj_name": "command.forward_and_check_collision",
+        "obj": ForwardAndCheckCollisionMacroCommandFactory(),
+        "object_map_name": "forward",
+    },
+)
+command_container.resolve(
+    object_name="ioc.register",
+    params={
+        "obj_name": "command.forward_with_rotate_and_check_collision",
+        "obj": ForwardWithRotateMacroCommandFactory(),
+        "object_map_name": "forward_with_rotate",
+    },
+)
+command_container.resolve(
+    object_name="ioc.register",
+    params={
+        "obj_name": "command.forward",
+        "obj": ForwardMacroCommandFactory(),
+        "object_map_name": None,
+    },
 )
 command_container.resolve(
     object_name="ioc.register",
     params={
         "obj_name": "command.forward_with_rotate",
-        "obj": ForwardWithRotateCommandFactory(),
-        "object_map_name": "forward_with_rotate",
+        "obj": ForwardWithRotateMacroCommandFactory(),
+        "object_map_name": None,
     },
 )
 command_container.resolve(
@@ -69,7 +90,7 @@ command_container.resolve(
     params={
         "obj_name": "command.rotate",
         "obj": RotateCommandFactory(),
-        "object_map_name": "rotate",
+        "object_map_name": None,
     },
 )
 command_container.resolve(
@@ -77,7 +98,7 @@ command_container.resolve(
     params={
         "obj_name": "command.move",
         "obj": MoveCommandFactory(),
-        "object_map_name": "move",
+        "object_map_name": None,
     },
 )
 command_container.resolve(

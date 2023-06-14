@@ -11,7 +11,7 @@ def test_check_fuel_valid_params() -> None:
     """
 
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
-    params = {"obj": game_container.resolve("game.objects.create", params=mock_obj)}
+    params = {"obj": game_container.resolve("game.objects.create.object", params=mock_obj)}
 
     try:
         command_container.resolve("command.check_fuel", params=params).execute()
@@ -25,7 +25,7 @@ def test_check_fuel_if_not_enough_fuel() -> None:
     """
 
     mock_obj = {"fuel_level": 9, "required_fuel_level": 10}
-    params = {"obj": game_container.resolve("game.objects.create", params=mock_obj)}
+    params = {"obj": game_container.resolve("game.objects.create.object", params=mock_obj)}
 
     with pytest.raises(NoFuelException):
         command_container.resolve("command.check_fuel", params=params).execute()

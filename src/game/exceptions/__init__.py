@@ -11,6 +11,11 @@ from src.game.exceptions.fuel_dependent import (
     ReadRequiredFuelLevelException,
     SetFuelLevelException,
 )
+from src.game.exceptions.game_map import (
+    OutOfMapRangeException,
+    PositionOccupiedException,
+    ObjectsCollided,
+)
 from src.game.exceptions.move import (
     ReadPositionException,
     ReadVelocityException,

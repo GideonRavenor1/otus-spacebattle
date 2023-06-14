@@ -4,7 +4,7 @@ from src.game.commands.base import BaseCommand
 from src.game.exceptions import RegisterObjectException
 
 if TYPE_CHECKING:
-    from src.game.dependencies import IoCContainer
+    from src.game.dependencies.base import IoCContainer
 
 
 class RegisterObject(BaseCommand):

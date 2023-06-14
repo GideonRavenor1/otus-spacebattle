@@ -21,7 +21,7 @@ def test_rotate_valid_param(direction: int, angular_velocity: int, direction_num
 
     mock_obj = {"direction": direction, "angular_velocity": angular_velocity, "direction_number": direction_number}
 
-    mock_rotate = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_rotate = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_rotate}
     command_container.resolve("command.rotate", params=params).execute()
 

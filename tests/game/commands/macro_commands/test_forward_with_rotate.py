@@ -21,14 +21,14 @@ def test_moving_forward_with_rotate_valid_params() -> None:
         "direction_number": 360,
     }
 
-    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
     macro_command = command_container.resolve("command.forward_with_rotate", params=params)
     macro_command.execute()
 
-    assert mock_space_ship_obj.get_position() == Vector(5, 8)
+    assert mock_space_ship_obj.get_position() == Vector(5, 8, mock_space_ship_obj.get_id())
     assert mock_space_ship_obj.get_fuel_level() == 80
-    assert mock_space_ship_obj.get_velocity() == Vector(90, 210)
+    assert mock_space_ship_obj.get_velocity() == Vector(90, 210, mock_space_ship_obj.get_id())
 
 
 def test_forward_movement_if_not_enough_fuel() -> None:
@@ -43,7 +43,7 @@ def test_forward_movement_if_not_enough_fuel() -> None:
         "required_fuel_level": 10,
     }
 
-    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
     macro_command = command_container.resolve("command.forward_with_rotate", params=params)
     with pytest.raises(CommandException):
@@ -62,7 +62,7 @@ def test_forward_movement_if_object_remains_in_place() -> None:
         "required_fuel_level": 10,
     }
 
-    mock_space_ship_obj = game_container.resolve("game.objects.create", params=mock_obj)
+    mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_space_ship_obj}
     macro_command = command_container.resolve("command.forward_with_rotate", params=params)
     with pytest.raises(CommandException):

@@ -1,3 +1,4 @@
+from src.game.commands.check_collision import CheckMapCollisionCommand
 from src.game.commands.interpret import InterpretCommand
 from src.game.commands.loggers import ExceptionLoggingCommand
 from src.game.commands.macro_commands import ForwardMacroCommand, ForwardWithRotateMacroCommand
