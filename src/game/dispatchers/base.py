@@ -10,6 +10,7 @@ from pika.adapters.blocking_connection import BlockingChannel
 from src.game.dependencies.command_container import command_container
 from src.game.dependencies.game_objects_container import game_container
 from src.game.exceptions import AuthenticationException
+from src.game.handlers.state import CommandProcessor
 from src.game.repositories.base import BaseRepository
 
 
@@ -145,9 +146,9 @@ class Dispatcher:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
 
-        queue = command_container.resolve("command.get_queue", params={"queue": Queue()}).execute()
-
-        thread_command = command_container.resolve("command.to_thread", params={"queue": queue})
+        queue = command_container.resolve("command.get_queue", params={"queue": Queue(), "game_id": game_id}).execute()
+        command_processor = CommandProcessor(queue)
+        thread_command = command_container.resolve("command.to_thread", params={"command_processor": command_processor})
         thread_command.execute()
 
         game_container.resolve(

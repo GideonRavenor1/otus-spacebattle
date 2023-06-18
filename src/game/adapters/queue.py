@@ -1,18 +1,18 @@
 from queue import Queue
 
 from src.game.commands.base import BaseCommand
-from src.game.exceptions import HardStop, SoftStop
-from src.game.handlers import ExceptionHandler
 
 
 class QueueAdapter:
-    def __init__(self, queue: Queue) -> None:
+    def __init__(self, queue: Queue, game_id: str) -> None:
         self._queue = queue
-        self._can_work_calculation = lambda: True
-        self._exception_handler = ExceptionHandler()
+        self._game_id = game_id
 
-    def get(self) -> BaseCommand:
-        return self._queue.get()
+    def get(self, timeout: float | None = None) -> BaseCommand:
+        return self._queue.get(timeout=timeout)
+
+    def get_game_id(self) -> str:
+        return self._game_id
 
     def task_done(self) -> None:
         self._queue.task_done()
@@ -20,27 +20,5 @@ class QueueAdapter:
     def put(self, command: BaseCommand) -> None:
         self._queue.put(command)
 
-    def stop_hard(self) -> None:
-        self._can_work_calculation = lambda: False
-
-    def stop_soft(self) -> None:
-        self._can_work_calculation = lambda: not self._queue.empty()
-
-    @property
-    def can_work(self) -> bool:
-        return self._can_work_calculation()
-
-    def __call__(self, *args, **kwargs) -> None:
-        while self.can_work:
-            command = self._queue.get()
-            with command.lock:
-                try:
-                    command.execute()
-                except SoftStop:
-                    self.stop_soft()
-                except HardStop:
-                    self.stop_hard()
-                except Exception as exception:
-                    self._exception_handler.handle(command, exception)
-
-                self._queue.task_done()
+    def is_empty(self) -> bool:
+        return self._queue.empty()

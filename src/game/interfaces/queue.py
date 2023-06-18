@@ -13,14 +13,8 @@ class IQueue(Protocol):
     def put(self, command: BaseCommand) -> None:
         ...
 
-    def stop_hard(self) -> None:
+    def is_empty(self) -> bool:
         ...
 
-    def stop_soft(self) -> None:
-        ...
-
-    def can_work(self) -> bool:
-        ...
-
-    def __call__(self, *args, **kwargs) -> None:
+    def get_game_id(self) -> str:
         ...

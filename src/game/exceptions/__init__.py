@@ -22,7 +22,6 @@ from src.game.exceptions.move import (
     SetPositionException,
     SetVelocityException,
 )
-from src.game.exceptions.multithreading import SoftStop, HardStop
 from src.game.exceptions.rotate import (
     RaedDirectionNumberException,
     ReadAngularVelocityException,

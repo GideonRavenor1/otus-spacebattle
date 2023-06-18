@@ -6,10 +6,10 @@ from src.game.handlers.state import CommandProcessor
 from src.game.vectors import Vector
 
 
-def test_hard_stop_with_valid_params() -> None:
+def test_run_command_with_valid_params() -> None:
     """
-    В данном тесты мы проверяем, что отработает лишь первая макрокоманда "forward", после чего сработает
-    "hard_stop", которая остановит исполнение очереди и потока.
+    В данном тесты мы проверяем, что первая макрокоманды "forward", передаются в другую очередь и затем
+    останавливается.
     """
 
     mock_obj = {
@@ -26,21 +26,28 @@ def test_hard_stop_with_valid_params() -> None:
     params = {"obj": mock_space_ship_obj}
 
     forward_command = command_container.resolve("command.forward", params=params)
-    hard_stop_command = command_container.resolve("command.hard_stop", params=params)
     forward_rotate_command = command_container.resolve("command.forward_with_rotate", params=params)
+    move_to_command = command_container.resolve("command.move_to", params=params)
+    run_command = command_container.resolve("command.run", params=params)
 
-    commands = [forward_command, hard_stop_command, forward_rotate_command]
+    commands = [forward_command, move_to_command, forward_rotate_command, run_command]
 
     queue = command_container.resolve(
         "command.get_queue",
         params={"queue": Queue(), "game_id": mock_space_ship_obj.get_id()},
     ).execute()
+
     for command in commands:
         queue.put(command)
 
     command_processor = CommandProcessor(queue)
     thread_command = command_container.resolve("command.to_thread", params={"command_processor": command_processor})
     thread_command.execute()
+
+    assert command_processor.status == "NormalState"
+
+    queue.put(command_container.resolve("command.hard_stop", params=params))
+
     thread_command.thread.join()
 
     assert mock_space_ship_obj.get_position() == Vector(5, 8, mock_space_ship_obj.get_id())

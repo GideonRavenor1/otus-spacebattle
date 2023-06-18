@@ -11,6 +11,8 @@ from src.game.factories.multithreading import (
     ThreadCommandFactory,
     SoftStopCommandFactory,
     HardStopCommandFactory,
+    MoveToCommandFactory,
+    RunCommandFactory,
 )
 from src.game.factories.repeats import FirstRepeatCommandFactory, SecondRepeatCommandFactory
 from src.game.factories.rotate import RotateCommandFactory
