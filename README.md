@@ -1,3 +1,7 @@
+[![Otus-spacebattle workflow](https://github.com/GideonRavenor1/otus-spacebattle/actions/workflows/otus_workflow.yml/badge.svg?branch=main)](https://github.com/GideonRavenor1/otus-spacebattle/actions/workflows/otus_workflow.yml)
+
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 # Космическая битва
 В далекой звездной системе встретились две флотилии космических кораблей.
 Корабли могут передвигаться по всему пространству звездной системы по прямой, поворачиваться против и по часовой стрелке, стрелять фотонными торпедами. 
