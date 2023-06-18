@@ -63,7 +63,9 @@ ignore = [
     "TRY200",
     # Unused blanket `noqa` directive
     "PGH004",
-    "RUF100"
+    "RUF100",
+    # ignore possible SQL injection vector through string-based query construction
+    "S608",
 ]
 
 exclude = [
