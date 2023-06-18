@@ -65,7 +65,7 @@ ignore = [
     "PGH004",
     "RUF100",
     # ignore possible SQL injection vector through string-based query construction
-    "S608"
+    "S608",
 ]
 
 exclude = [
