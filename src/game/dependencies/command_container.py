@@ -16,6 +16,8 @@ from src.game.factories import (
     HardStopCommandFactory,
     InterpretCommandFactory,
     ForwardAndCheckCollisionMacroCommandFactory,
+    MoveToCommandFactory,
+    RunCommandFactory,
 )
 
 command_container = IoCContainer()
@@ -154,6 +156,22 @@ command_container.resolve(
     params={
         "obj_name": "command.interpret",
         "obj": InterpretCommandFactory(),
+        "object_map_name": None,
+    },
+)
+command_container.resolve(
+    object_name="ioc.register",
+    params={
+        "obj_name": "command.move_to",
+        "obj": MoveToCommandFactory(),
+        "object_map_name": None,
+    },
+)
+command_container.resolve(
+    object_name="ioc.register",
+    params={
+        "obj_name": "command.run",
+        "obj": RunCommandFactory(),
         "object_map_name": None,
     },
 )

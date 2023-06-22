@@ -5,6 +5,13 @@ from src.game.commands.macro_commands import ForwardMacroCommand, ForwardWithRot
 from src.game.commands.move import ChangeVelocityCommand, MoveCommand
 from src.game.commands.repeats import SecondRepeatCommand, FirstRepeatCommand
 from src.game.commands.rotate import RotateCommand
-from src.game.commands.multithreading import QueueCommand, HardStopCommand, SoftStopCommand, ThreadCommand
+from src.game.commands.multithreading import (
+    QueueCommand,
+    HardStopCommand,
+    SoftStopCommand,
+    ThreadCommand,
+    MoveToCommand,
+    RunCommand,
+)
 from src.game.commands.register import RegisterObject
 from src.game.commands.fuel_dependent import BurnFuelCommand, CheckFuelCommand

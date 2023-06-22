@@ -2,6 +2,7 @@ from queue import Queue
 
 from src.game.dependencies.command_container import command_container
 from src.game.dependencies.game_objects_container import game_container
+from src.game.handlers.state import CommandProcessor
 from src.game.vectors import Vector
 
 
@@ -24,16 +25,20 @@ def test_soft_stop_with_valid_params() -> None:
     params = {"obj": mock_space_ship_obj}
 
     forward_command = command_container.resolve("command.forward", params=params)
-    hard_stop_command = command_container.resolve("command.soft_stop", params=params)
+    soft_stop_command = command_container.resolve("command.soft_stop", params=params)
     forward_rotate_command = command_container.resolve("command.forward_with_rotate", params=params)
 
-    commands = [forward_command, hard_stop_command, forward_rotate_command]
+    commands = [forward_command, soft_stop_command, forward_rotate_command]
 
-    queue = command_container.resolve("command.get_queue", params={"queue": Queue()}).execute()
+    queue = command_container.resolve(
+        "command.get_queue",
+        params={"queue": Queue(), "game_id": mock_space_ship_obj.get_id()},
+    ).execute()
     for command in commands:
         queue.put(command)
 
-    thread_command = command_container.resolve("command.to_thread", params={"queue": queue})
+    command_processor = CommandProcessor(queue)
+    thread_command = command_container.resolve("command.to_thread", params={"command_processor": command_processor})
     thread_command.execute()
     thread_command.thread.join()
 
