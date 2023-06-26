@@ -5,6 +5,7 @@ import pytest
 
 from src.game.dependencies.command_container import command_container
 from src.game.dependencies.game_objects_container import game_container
+from src.game.exceptions import PermissionException
 from src.interpreter import CommandInterpreter
 
 
@@ -34,5 +35,5 @@ def test_interpret_valid_params() -> None:
     )
     try:
         interpreter.interpret()
-    except Exception as e:
+    except PermissionException as e:
         pytest.fail(e)
