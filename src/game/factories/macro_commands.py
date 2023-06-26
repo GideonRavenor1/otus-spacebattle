@@ -61,7 +61,7 @@ class ForwardAndCheckCollisionMacroCommandFactory(ForwardMacroCommandFactory):
         macro_command = super().__call__(params=params)
         obj: T_MN = params.get("obj")
 
-        game_id = params.get("game_id")
+        game_id = params.get("game_id") or obj.get_id()
         if game_id is None:
             raise ValueError("Не указан game_id")
 

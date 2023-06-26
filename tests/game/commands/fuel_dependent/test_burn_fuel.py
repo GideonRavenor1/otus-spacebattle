@@ -1,3 +1,5 @@
+import random
+
 import pytest
 
 from src.game.dependencies.command_container import command_container
@@ -9,8 +11,8 @@ def test_burn_fuel_valid_params() -> None:
     """
     Проверка сжигания топлива у объекта.
     """
-
-    mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
+    user_id = random.randint(1, 100)
+    mock_obj = {"fuel_level": 100, "required_fuel_level": 10, "user_id": user_id}
 
     mock_burning_fuel_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_burning_fuel_obj}
@@ -23,7 +25,7 @@ def test_burn_fuel_impossible_read_fuel_level() -> None:
     """
     Проверка сжигания топлива у объекта, у которого невозможно прочитать текущий уровень топлива.
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
 
     class BurnFuelImplementation:
@@ -36,6 +38,9 @@ def test_burn_fuel_impossible_read_fuel_level() -> None:
         def get_required_fuel_level(self) -> int:
             return mock_obj["required_fuel_level"]
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": BurnFuelImplementation()}
 
     with pytest.raises(ReadFuelLevelException):
@@ -47,6 +52,7 @@ def test_burn_fuel_impossible_set_fuel_level() -> None:
     Проверка сжигания топлива у объекта, у которого невозможно установить новый уровень топлива.
     """
 
+    user_id = random.randint(1, 100)
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
 
     class BurnFuelImplementation:
@@ -59,6 +65,9 @@ def test_burn_fuel_impossible_set_fuel_level() -> None:
         def get_required_fuel_level(self) -> int:
             return mock_obj["required_fuel_level"]
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": BurnFuelImplementation()}
 
     with pytest.raises(SetFuelLevelException):
@@ -70,6 +79,7 @@ def test_burn_fuel_impossible_read_required_fuel_level() -> None:
     Проверка сжигания топлива у объекта, у которого невозможно прочитать необходимый уровень топлива.
     """
 
+    user_id = random.randint(1, 100)
     mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
 
     class BurnFuelImplementation:
@@ -81,6 +91,9 @@ def test_burn_fuel_impossible_read_required_fuel_level() -> None:
 
         def get_required_fuel_level(self) -> int:
             raise ReadRequiredFuelLevelException
+
+        def get_user_id(self) -> int:
+            return user_id
 
     params = {"obj": BurnFuelImplementation()}
     with pytest.raises(ReadRequiredFuelLevelException):

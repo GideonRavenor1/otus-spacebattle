@@ -12,6 +12,7 @@ from src.game.dependencies.game_objects_container import game_container
 from src.game.exceptions import AuthenticationException
 from src.game.handlers.state import CommandProcessor
 from src.game.repositories.base import BaseRepository
+from src.interpreter import CommandInterpreter
 
 
 def token_required(func: Callable) -> Callable:
@@ -116,6 +117,7 @@ class Dispatcher:
 
         game_objects = []
         for param in objects_params:
+            param["user_id"] = params.get("user_id")
             game_object = game_container.resolve("game.objects.create.object", params=param)
             game_container.resolve(
                 "ioc.register",
@@ -167,6 +169,27 @@ class Dispatcher:
 
     @token_required
     @checking_invitation
+    def _handle_add_game_object(self, params: dict, **kwargs) -> dict:
+        game_id = params.get("game_id")
+        self._check_object(game_id, name="game_id")
+
+        object_params: dict = params.get("object_params")
+        self._check_object(object_params, name="object_params")
+
+        object_params["user_id"] = params.get("user_id")
+
+        game_object = game_container.resolve("game.objects.create.object", params=object_params)
+        game_container.resolve(
+            "ioc.register",
+            params={
+                "obj_name": f"game.namespaces.{game_id}.object_{game_object.id}",
+                "obj": lambda params: game_object,  # noqa
+            },
+        )
+        return {"action": "add_game_object", "game_id": game_id, "object": game_object.data}
+
+    @token_required
+    @checking_invitation
     def _handle_execute_command(self, params: dict, **kwargs) -> dict:
         game_id = params.get("game_id")
         self._check_object(game_id, name="game_id")
@@ -188,16 +211,14 @@ class Dispatcher:
             raise ValueError(msg)
 
         game_queue = game_container.resolve(f"game.namespaces.{game_id}.queue")
-        interpret_command = command_container.resolve(
-            "command.interpret",
-            params={
-                "ioc_container": command_container,
-                "game_object": game_object,
-                "game_queue": game_queue,
-                "command_name": command_name,
-            },
+        interpreter = CommandInterpreter(
+            ioc_container=command_container,
+            game_object=game_object,
+            game_queue=game_queue,
+            command_name=command_name,
+            user_id=params.get("user_id"),
         )
-        interpret_command.execute()
+        interpreter.interpret()
         return {"action": "execute_command", "game_id": game_id, "game_object": game_object.data}
 
     @staticmethod

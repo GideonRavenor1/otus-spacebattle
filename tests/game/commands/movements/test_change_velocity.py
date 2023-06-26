@@ -1,3 +1,4 @@
+import random
 import uuid
 
 import pytest
@@ -12,8 +13,14 @@ def test_change_velocity_valid_params() -> None:
     """
     Проверка модификации вектора мгновенной скорости при повороте.
     """
-
-    mock_obj = {"velocity": [-7, 3], "direction": 100, "angular_velocity": 30, "direction_number": 360}
+    user_id = random.randint(1, 100)
+    mock_obj = {
+        "velocity": [-7, 3],
+        "direction": 100,
+        "angular_velocity": 30,
+        "direction_number": 360,
+        "user_id": user_id,
+    }
 
     obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": obj}
@@ -26,6 +33,7 @@ def test_change_velocity_impossible_set_velocity() -> None:
     """
     Проверка модификации вектора мгновенной скорости при повороте, если невозможно изменить мгновенную скорость.
     """
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"velocity": Vector(-7, 3, object_id), "direction": 100, "angular_velocity": 30, "direction_number": 360}
@@ -43,6 +51,9 @@ def test_change_velocity_impossible_set_velocity() -> None:
         def get_angular_velocity(self) -> int:
             return mock_obj["angular_velocity"]
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(SetVelocityException):
         command_container.resolve("command.change_velocity", params=params).execute()
@@ -52,6 +63,7 @@ def test_change_velocity_impossible_read_velocity() -> None:
     """
     Проверка модификации вектора мгновенной скорости при повороте, если объект невозможен прочитать мгновенную скорость.
     """
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"velocity": Vector(-7, 3, object_id), "direction": 100, "angular_velocity": 30, "direction_number": 360}
@@ -65,6 +77,9 @@ def test_change_velocity_impossible_read_velocity() -> None:
 
         def get_angular_velocity(self) -> int:
             return mock_obj["angular_velocity"]
+
+        def get_user_id(self) -> int:
+            return user_id
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):
@@ -75,6 +90,7 @@ def test_change_velocity_impossible_read_angular_velocity() -> None:
     """
     Проверка модификации вектора мгновенной скорости при повороте, если невозможно прочитать угловую скорость
     """
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"velocity": Vector(-7, 3, object_id), "direction": 100, "angular_velocity": 30, "direction_number": 360}
@@ -88,6 +104,9 @@ def test_change_velocity_impossible_read_angular_velocity() -> None:
 
         def get_angular_velocity(self) -> int:
             return mock_obj["angular_velocity"]
+
+        def get_user_id(self) -> int:
+            return user_id
 
     params = {"obj": ChangeVelocityImplementation()}
     with pytest.raises(ReadVelocityException):

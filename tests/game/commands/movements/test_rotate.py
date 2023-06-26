@@ -1,3 +1,5 @@
+import random
+
 import pytest
 
 from src.game.dependencies.command_container import command_container
@@ -18,8 +20,13 @@ def test_rotate_valid_param(direction: int, angular_velocity: int, direction_num
     """
     Положительные тесты, включающую нулевую угловую скорость
     """
-
-    mock_obj = {"direction": direction, "angular_velocity": angular_velocity, "direction_number": direction_number}
+    user_id = random.randint(1, 100)
+    mock_obj = {
+        "direction": direction,
+        "angular_velocity": angular_velocity,
+        "direction_number": direction_number,
+        "user_id": user_id,
+    }
 
     mock_rotate = game_container.resolve("game.objects.create.object", params=mock_obj)
     params = {"obj": mock_rotate}
@@ -32,7 +39,7 @@ def test_rotate_impossible_read_direction() -> None:
     """
     Попытка повернуть объект, у которого невозможно прочитать текущее направление в пространстве, приводит к ошибке
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {"direction": 100, "angular_velocity": 30, "direction_number": 360}
 
     class RotatableImplementation:
@@ -48,6 +55,9 @@ def test_rotate_impossible_read_direction() -> None:
         def set_direction(self, value: int) -> None:
             mock_obj["direction"] = value
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": RotatableImplementation()}
     with pytest.raises(ReadDirectionException):
         command_container.resolve("command.rotate", params=params).execute()
@@ -57,7 +67,7 @@ def test_rotate_impossible_read_angular_velocity() -> None:
     """
     Попытка повернуть объект, у которого невозможно прочитать угловую скорость, приводит к ошибке
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {"direction": 100, "angular_velocity": 30, "direction_number": 360}
 
     class RotatableImplementation:
@@ -73,6 +83,9 @@ def test_rotate_impossible_read_angular_velocity() -> None:
         def set_direction(self, value: int) -> None:
             mock_obj["direction"] = value
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": RotatableImplementation()}
     with pytest.raises(ReadAngularVelocityException):
         command_container.resolve("command.rotate", params=params).execute()
@@ -82,7 +95,7 @@ def test_rotate_impossible_set_direction() -> None:
     """
     Попытка повернуть объект, у которого невозможно изменить текущее направление в пространстве, приводит к ошибке
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {"direction": 100, "angular_velocity": 30, "direction_number": 360}
 
     class RotatableImplementation:
@@ -98,6 +111,9 @@ def test_rotate_impossible_set_direction() -> None:
         def set_direction(self, value: int) -> None:
             raise SetDirectionException
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": RotatableImplementation()}
     with pytest.raises(SetDirectionException):
         command_container.resolve("command.rotate", params=params).execute()
@@ -107,7 +123,7 @@ def test_rotate_impossible_read_direction_number() -> None:
     """
     Попытка повернуть объект, у которого невозможно прочитать номер направления, приводит к ошибке
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {"direction": 100, "angular_velocity": 30, "direction_number": 360}
 
     class RotatableImplementation:
@@ -122,6 +138,9 @@ def test_rotate_impossible_read_direction_number() -> None:
 
         def set_direction(self, value: int) -> None:
             mock_obj["direction_number"] = value
+
+        def get_user_id(self) -> int:
+            return user_id
 
     params = {"obj": RotatableImplementation()}
     with pytest.raises(RaedDirectionNumberException):

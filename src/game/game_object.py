@@ -23,8 +23,9 @@ CENTERING_COEFFICIENT = 2
 
 
 class GameObject:
-    def __init__(self, data: dict[str, Vector | int | list], object_id: str | None = None) -> None:
+    def __init__(self, data: dict[str, Vector | int | list], user_id: int, object_id: str | None = None) -> None:
         self._id = str(uuid.uuid4()) if object_id is None else object_id
+        self._user_id: int = user_id
         self._data = data
         self._position: Vector | None = data.get("position")
         self._velocity: Vector | None = data.get("velocity")
@@ -34,6 +35,9 @@ class GameObject:
         self._angular_velocity: int | None = data.get("angular_velocity")
         self._direction_number: int | None = data.get("direction_number")
         self._is_alive: bool = True
+
+    def get_user_id(self) -> int:
+        return self._user_id
 
     def is_alive(self) -> bool:
         return self._is_alive
