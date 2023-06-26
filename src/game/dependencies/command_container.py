@@ -14,7 +14,6 @@ from src.game.factories import (
     ThreadCommandFactory,
     QueueCommandFactory,
     HardStopCommandFactory,
-    InterpretCommandFactory,
     ForwardAndCheckCollisionMacroCommandFactory,
     MoveToCommandFactory,
     RunCommandFactory,
@@ -148,14 +147,6 @@ command_container.resolve(
     params={
         "obj_name": "command.get_queue",
         "obj": QueueCommandFactory(),
-        "object_map_name": None,
-    },
-)
-command_container.resolve(
-    object_name="ioc.register",
-    params={
-        "obj_name": "command.interpret",
-        "obj": InterpretCommandFactory(),
         "object_map_name": None,
     },
 )

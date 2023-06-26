@@ -1,3 +1,4 @@
+import random
 import uuid
 
 import pytest
@@ -13,10 +14,11 @@ def test_move_valid_params() -> None:
     Для объекта, находящегося в точке (12, 5) и движущегося со скоростью (-7, 3)
     движение меняет положение объекта на (5, 8)
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {
         "position": [12, 5],
         "velocity": [-7, 3],
+        "user_id": user_id,
     }
 
     mock_movable_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
@@ -30,6 +32,7 @@ def test_move_impossible_read_position() -> None:
     """
     Попытка сдвинуть объект, у которого невозможно прочитать положение в пространстве, приводит к ошибке
     """
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
@@ -44,6 +47,9 @@ def test_move_impossible_read_position() -> None:
         def get_velocity(self) -> Vector:
             return mock_obj["velocity"]
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": MovableImplementation()}
     with pytest.raises(ReadPositionException):
         command_container.resolve("command.move", params=params).execute()
@@ -53,10 +59,11 @@ def test_move_if_object_remains_in_place() -> None:
     """
     После сдвига объекта он остается на месте.
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {
         "position": [12, 5],
         "velocity": [0, 0],
+        "user_id": user_id,
     }
 
     mock_movable_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
@@ -70,6 +77,7 @@ def test_move_impossible_read_velocity() -> None:
     """
     Попытка сдвинуть объект, у которого невозможно прочитать значение мгновенной скорости, приводит к ошибке
     """
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
@@ -84,6 +92,9 @@ def test_move_impossible_read_velocity() -> None:
         def get_velocity(self) -> Vector:
             raise ReadVelocityException
 
+        def get_user_id(self) -> int:
+            return user_id
+
     params = {"obj": MovableImplementation()}
     with pytest.raises(ReadVelocityException):
         command_container.resolve("command.move", params=params).execute()
@@ -93,7 +104,7 @@ def test_move_impossible_set_position() -> None:
     """
     Попытка сдвинуть объект, у которого невозможно изменить положение в пространстве, приводит к ошибке
     """
-
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
@@ -107,6 +118,9 @@ def test_move_impossible_set_position() -> None:
 
         def get_velocity(self) -> Vector:
             return mock_obj["velocity"]
+
+        def get_user_id(self) -> int:
+            return user_id
 
     params = {"obj": MovableImplementation()}
     with pytest.raises(SetPositionException):
