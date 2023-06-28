@@ -1,3 +1,5 @@
+import random
+
 import pytest
 
 from src.game.dependencies.game_objects_container import game_container
@@ -9,8 +11,8 @@ def test_check_fuel_valid_params() -> None:
     """
     Проверка необходимого уровня топлива у объекта.
     """
-
-    mock_obj = {"fuel_level": 100, "required_fuel_level": 10}
+    user_id = random.randint(1, 100)
+    mock_obj = {"fuel_level": 100, "required_fuel_level": 10, "user_id": user_id}
     params = {"obj": game_container.resolve("game.objects.create.object", params=mock_obj)}
 
     try:
@@ -23,8 +25,8 @@ def test_check_fuel_if_not_enough_fuel() -> None:
     """
     Проверка необходимого уровня топлива у объекта, если недостаточно топлива.
     """
-
-    mock_obj = {"fuel_level": 9, "required_fuel_level": 10}
+    user_id = random.randint(1, 100)
+    mock_obj = {"fuel_level": 9, "required_fuel_level": 10, "user_id": user_id}
     params = {"obj": game_container.resolve("game.objects.create.object", params=mock_obj)}
 
     with pytest.raises(NoFuelException):

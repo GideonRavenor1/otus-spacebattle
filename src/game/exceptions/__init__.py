@@ -1,4 +1,4 @@
-from src.game.exceptions.auth import AuthenticationException
+from src.game.exceptions.auth import AuthenticationException, PermissionException
 from src.game.exceptions.command import (
     CommandException,
     RegisterObjectException,

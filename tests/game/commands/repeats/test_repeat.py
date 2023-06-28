@@ -1,3 +1,4 @@
+import random
 import uuid
 
 import pytest
@@ -13,7 +14,8 @@ def test_repeat_valid_params() -> None:
     Проверяем, что команда повторяется и сдвигает объект с места
     """
 
-    mock_obj = {"direction": 250, "angular_velocity": 30, "direction_number": 360}
+    user_id = random.randint(1, 100)
+    mock_obj = {"direction": 250, "angular_velocity": 30, "direction_number": 360, "user_id": user_id}
     mock_rotate_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     rotate_params = {"obj": mock_rotate_obj}
     command = command_container.resolve("command.rotate", params=rotate_params)
@@ -29,6 +31,7 @@ def test_repeat_raise_exception() -> None:
     """
     Проверяем, что при повторных запусков команды в лог выводится сообщение об ошибке
     """
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
@@ -45,6 +48,9 @@ def test_repeat_raise_exception() -> None:
 
         def set_direction(self, value: int) -> None:
             mock_obj["direction"] = value
+
+        def get_user_id(self) -> int:
+            return user_id
 
     rotate_params = {"obj": RotatableImplementation()}
     command = command_container.resolve("command.rotate", params=rotate_params)

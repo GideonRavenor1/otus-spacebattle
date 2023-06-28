@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class CheckMapCollisionCommand(BaseCommand):
-    def __init__(self, *, obj: Movable, game_id: int, ioc_container: "IoCContainer", **kwargs) -> None:
+    def __init__(self, *, obj: Movable, game_id: str, ioc_container: "IoCContainer", **kwargs) -> None:
         self._obj = obj
         self._game_id = game_id
         self._ioc_container = ioc_container

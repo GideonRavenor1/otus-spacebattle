@@ -1,4 +1,3 @@
-from src.game.factories.interpret import InterpretCommandFactory
 from src.game.factories.macro_commands import (
     ForwardMacroCommandFactory,
     ForwardWithRotateMacroCommandFactory,

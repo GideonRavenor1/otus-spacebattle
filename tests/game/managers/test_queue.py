@@ -1,3 +1,5 @@
+import random
+
 from _pytest.logging import LogCaptureFixture
 
 from src.game.dependencies.command_container import command_container
@@ -7,6 +9,7 @@ from src.game.vectors import Vector
 
 
 def test_queue_manager_with_valid_params() -> None:
+    user_id = random.randint(1, 100)
     mock_obj = {
         "position": [12, 5],
         "velocity": [-7, 3],
@@ -15,6 +18,7 @@ def test_queue_manager_with_valid_params() -> None:
         "direction": 100,
         "angular_velocity": 30,
         "direction_number": 360,
+        "user_id": user_id,
     }
 
     mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
@@ -37,6 +41,7 @@ def test_manager_with_not_enough_fuel(caplog: LogCaptureFixture) -> None:
     Так же проверяем, что ошибка записалось в лог.
     """
 
+    user_id = random.randint(1, 100)
     mock_obj = {
         "position": [12, 5],
         "velocity": [-7, 3],
@@ -45,6 +50,7 @@ def test_manager_with_not_enough_fuel(caplog: LogCaptureFixture) -> None:
         "direction": 100,
         "angular_velocity": 30,
         "direction_number": 360,
+        "user_id": user_id,
     }
 
     mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)

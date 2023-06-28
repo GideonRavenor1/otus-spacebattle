@@ -31,7 +31,16 @@
       "direction_number": 360
     }
   ],
-  "object_id": "str" // Парсится только в случае указания execute_command
+  "object_id": "str",   // Парсится только в случае указания execute_command
+  "object_params":  {   // Парсится только в случание add_game_object
+      "position": [12, 5],
+      "velocity": [-7, 3],
+      "fuel_level": 100,
+      "required_fuel_level": 10,
+      "direction": 100,
+      "angular_velocity": 30,
+      "direction_number": 360
+    }
 }
 ```
 

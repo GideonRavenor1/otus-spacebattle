@@ -1,3 +1,4 @@
+import random
 from queue import Queue
 
 from src.game.dependencies.command_container import command_container
@@ -11,7 +12,7 @@ def test_move_to_with_valid_params() -> None:
     В данном тесты мы проверяем, что отработает первая макрокоманда "forward", остальные передаются в другую очередь и
     затем останавливается.
     """
-
+    user_id = random.randint(1, 100)
     mock_obj = {
         "position": [12, 5],
         "velocity": [-7, 3],
@@ -20,6 +21,7 @@ def test_move_to_with_valid_params() -> None:
         "direction": 100,
         "angular_velocity": 30,
         "direction_number": 360,
+        "user_id": user_id,
     }
 
     mock_space_ship_obj = game_container.resolve("game.objects.create.object", params=mock_obj)

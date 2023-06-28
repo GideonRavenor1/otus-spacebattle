@@ -66,6 +66,8 @@ ignore = [
     "RUF100",
     # ignore possible SQL injection vector through string-based query construction
     "S608",
+    # ignore Standard pseudo-random generators are not suitable for cryptographic purposes
+    "S311",
 ]
 
 exclude = [

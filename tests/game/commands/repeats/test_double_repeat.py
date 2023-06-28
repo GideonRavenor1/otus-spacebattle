@@ -1,3 +1,4 @@
+import random
 import uuid
 
 import pytest
@@ -12,8 +13,8 @@ def test_double_repeat_valid_params() -> None:
     """
     Проверяем, что команда повторяется и сдвигает объект с места
     """
-
-    mock_obj = {"position": [12, 5], "velocity": [-7, 3]}
+    user_id = random.randint(1, 100)
+    mock_obj = {"position": [12, 5], "velocity": [-7, 3], "user_id": user_id}
     mock_movable_obj = game_container.resolve("game.objects.create.object", params=mock_obj)
     move_params = {"obj": mock_movable_obj}
     command = command_container.resolve("command.move", params=move_params)
@@ -30,7 +31,7 @@ def test_double_repeat_raise_exception() -> None:
     """
     Проверяем, что при повторных запусков команды в лог выводится сообщение об ошибке
     """
-
+    user_id = random.randint(1, 100)
     object_id = str(uuid.uuid4())
 
     mock_obj = {"position": Vector(12, 5, object_id), "velocity": Vector(-7, 3, object_id)}
@@ -44,6 +45,9 @@ def test_double_repeat_raise_exception() -> None:
 
         def get_velocity(self) -> Vector:
             return mock_obj["velocity"]
+
+        def get_user_id(self) -> int:
+            return user_id
 
     move_params = {"obj": MovableImplementation()}
     command = command_container.resolve("command.move", params=move_params)
